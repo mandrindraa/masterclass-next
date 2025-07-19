@@ -1,32 +1,19 @@
-"use client";
+"use client"
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Edit, Plus, Search, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Plus, Search, Edit, Trash2 } from "lucide-react"
 
 interface StudentsManagementProps {
-  userRole: string;
+  userRole: string
 }
 
 export function StudentsManagement({ userRole }: StudentsManagementProps) {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("")
 
   // Mock data - in real app, this would come from your database
   const students = [
@@ -38,49 +25,24 @@ export function StudentsManagement({ userRole }: StudentsManagementProps) {
       course: "Mathematics 101",
       status: "Active",
     },
-    {
-      id: 2,
-      name: "Bob Smith",
-      email: "bob@school.edu",
-      grade: "B+",
-      course: "Physics 201",
-      status: "Active",
-    },
-    {
-      id: 3,
-      name: "Carol Davis",
-      email: "carol@school.edu",
-      grade: "A-",
-      course: "Chemistry 101",
-      status: "Inactive",
-    },
-    {
-      id: 4,
-      name: "David Wilson",
-      email: "david@school.edu",
-      grade: "B",
-      course: "Biology 101",
-      status: "Active",
-    },
-  ];
+    { id: 2, name: "Bob Smith", email: "bob@school.edu", grade: "B+", course: "Physics 201", status: "Active" },
+    { id: 3, name: "Carol Davis", email: "carol@school.edu", grade: "A-", course: "Chemistry 101", status: "Inactive" },
+    { id: 4, name: "David Wilson", email: "david@school.edu", grade: "B", course: "Biology 101", status: "Active" },
+  ]
 
   const filteredStudents = students.filter(
     (student) =>
       student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.course.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      student.course.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">
-            Students Management
-          </h2>
-          <p className="text-muted-foreground">
-            Manage student records and information
-          </p>
+          <h2 className="text-3xl font-bold tracking-tight">Students Management</h2>
+          <p className="text-muted-foreground">Manage student records and information</p>
         </div>
         {userRole === "admin" && (
           <Button>
@@ -93,9 +55,7 @@ export function StudentsManagement({ userRole }: StudentsManagementProps) {
       <Card>
         <CardHeader>
           <CardTitle>Student Directory</CardTitle>
-          <CardDescription>
-            View and manage all registered students
-          </CardDescription>
+          <CardDescription>View and manage all registered students</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-2 mb-4">
@@ -129,13 +89,7 @@ export function StudentsManagement({ userRole }: StudentsManagementProps) {
                     <Badge variant="secondary">{student.grade}</Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge
-                      variant={
-                        student.status === "Active" ? "default" : "secondary"
-                      }
-                    >
-                      {student.status}
-                    </Badge>
+                    <Badge variant={student.status === "Active" ? "default" : "secondary"}>{student.status}</Badge>
                   </TableCell>
                   {userRole === "admin" && (
                     <TableCell>
@@ -156,5 +110,5 @@ export function StudentsManagement({ userRole }: StudentsManagementProps) {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

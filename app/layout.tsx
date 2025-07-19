@@ -1,24 +1,37 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import type React from "react";
-import "./globals.css";
+import type React from "react"
+import { NextIntlClientProvider } from "next-intl"
+import { getMessages } from "next-intl/server"
+import { Inter } from "next/font/google"
+import "./globals.css"
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] })
 
-export const metadata: Metadata = {
-  title: "School Management System",
-  description: "Comprehensive school management application",
-  generator: "v0.dev",
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
-  );
+export function generateStaticParams() {
+  return [{ locale: "en" }, { locale: "fr" }]
 }
+
+export default async function RootLayout({
+  children,
+  params: { locale },
+}: {
+  children: React.ReactNode
+  params: { locale: string }
+}) {
+  // Validate locale and fallback to 'en' if invalid
+  const validLocale = ["en", "fr"].includes(locale) ? locale : "en"
+
+  // Providing all messages to the client
+  const messages = await getMessages({ locale: validLocale })
+
+  return (
+    <html lang={validLocale}>
+      <body className={inter.className}>
+        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+      </body>
+    </html>
+  )
+}
+
+export const metadata = {
+      generator: 'v0.dev'
+    };

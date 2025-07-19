@@ -1,105 +1,87 @@
-"use client";
+"use client"
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { setAuthCookie } from "@/lib/auth";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import type React from "react";
-import { useState } from "react";
+import type React from "react"
+import { useState } from "react"
+import { useRouter, useSearchParams, useParams } from "next/navigation"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useTranslations } from "next-intl"
+import { LanguageSwitcher } from "@/components/language-switcher"
 
 export function SignInForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/dashboard";
-
-  // Mock users for demo
-  const mockUsers = [
-    {
-      email: "admin@school.edu",
-      password: "admin123",
-      role: "admin",
-      name: "Admin User",
-    },
-    {
-      email: "teacher@school.edu",
-      password: "teacher123",
-      role: "teacher",
-      name: "John Teacher",
-    },
-    {
-      email: "student@school.edu",
-      password: "student123",
-      role: "student",
-      name: "Jane Student",
-    },
-  ];
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const params = useParams()
+  const locale = params.locale as string
+  const redirectTo = searchParams.get("redirect") || `/${locale}/dashboard`
+  const t = useTranslations("auth")
+  const tCommon = useTranslations("common")
 
   const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+    e.preventDefault()
+    setLoading(true)
+    setError("")
 
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const response = await fetch("/api/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
 
-    const user = mockUsers.find(
-      (u) => u.email === email && u.password === password
-    );
+      const data = await response.json()
 
-    if (user) {
-      const userData = { ...user, id: Date.now().toString() };
+      if (response.ok) {
+        // Store user data in localStorage for client-side access
+        localStorage.setItem("currentUser", JSON.stringify(data.user))
 
-      // Set authentication cookie and localStorage
-      setAuthCookie(userData);
-
-      // Redirect to intended page or dashboard
-      router.push(redirectTo);
-      router.refresh();
-    } else {
-      setError("Invalid email or password");
+        // Redirect to intended page or dashboard
+        router.push(redirectTo)
+        router.refresh()
+      } else {
+        setError(data.error || t("invalidCredentials"))
+      }
+    } catch (error) {
+      setError(t("invalidCredentials"))
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false);
-  };
+  }
 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Sign In</CardTitle>
-        <CardDescription>
-          Enter your credentials to access your account
-        </CardDescription>
+        <div className="flex justify-between items-start">
+          <div>
+            <CardTitle>{t("signinTitle")}</CardTitle>
+            <CardDescription>{t("signinSubtitle")}</CardDescription>
+          </div>
+          <LanguageSwitcher />
+        </div>
       </CardHeader>
       <CardContent>
-        {redirectTo !== "/dashboard" && (
+        {redirectTo !== `/${locale}/dashboard` && (
           <Alert className="mb-4">
-            <AlertDescription>
-              You need to sign in to access that page. You'll be redirected
-              after signing in.
-            </AlertDescription>
+            <AlertDescription>{t("redirectMessage")}</AlertDescription>
           </Alert>
         )}
 
         <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-          <p className="text-sm text-blue-800 font-medium">Demo Accounts:</p>
+          <p className="text-sm text-blue-800 font-medium">{t("demoAccounts")}</p>
           <div className="text-xs text-blue-700 mt-2 space-y-1">
-            <div>Admin: admin@school.edu / admin123</div>
-            <div>Teacher: teacher@school.edu / teacher123</div>
-            <div>Student: student@school.edu / student123</div>
+            <div>{t("admin")}: admin@school.edu / admin123</div>
+            <div>{t("teacher")}: sarah.wilson@school.edu / teacher123</div>
+            <div>{t("student")}: alice.johnson@school.edu / student123</div>
           </div>
         </div>
 
@@ -111,41 +93,41 @@ export function SignInForm() {
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t("email")}</Label>
             <Input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="Enter your email"
+              placeholder={t("enterEmail")}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{t("password")}</Label>
             <Input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder="Enter your password"
+              placeholder={t("enterPassword")}
             />
           </div>
 
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? t("signingIn") : t("signin")}
           </Button>
 
           <div className="text-center text-sm">
-            {"Don't have an account? "}
-            <Link href="/auth/signup" className="text-primary hover:underline">
-              Sign up
+            {t("dontHaveAccount")}{" "}
+            <Link href={`/${locale}/auth/signup`} className="text-primary hover:underline">
+              {t("signup")}
             </Link>
           </div>
         </form>
       </CardContent>
     </Card>
-  );
+  )
 }

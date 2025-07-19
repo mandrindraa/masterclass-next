@@ -1,32 +1,19 @@
-"use client";
+"use client"
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Download, Edit, FileText, Plus, Search, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Plus, Search, Edit, Trash2, FileText, Download } from "lucide-react"
 
 interface NotesManagementProps {
-  userRole: string;
+  userRole: string
 }
 
 export function NotesManagement({ userRole }: NotesManagementProps) {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("")
 
   // Mock data
   const notes = [
@@ -66,25 +53,21 @@ export function NotesManagement({ userRole }: NotesManagementProps) {
       type: "Assignment",
       status: "Published",
     },
-  ];
+  ]
 
   const filteredNotes = notes.filter(
     (note) =>
       note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       note.course.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      note.author.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      note.author.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">
-            Notes Management
-          </h2>
-          <p className="text-muted-foreground">
-            Manage course notes and study materials
-          </p>
+          <h2 className="text-3xl font-bold tracking-tight">Notes Management</h2>
+          <p className="text-muted-foreground">Manage course notes and study materials</p>
         </div>
         {(userRole === "admin" || userRole === "teacher") && (
           <Button>
@@ -97,9 +80,7 @@ export function NotesManagement({ userRole }: NotesManagementProps) {
       <Card>
         <CardHeader>
           <CardTitle>Course Notes Library</CardTitle>
-          <CardDescription>
-            Access and manage all course materials and notes
-          </CardDescription>
+          <CardDescription>Access and manage all course materials and notes</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-2 mb-4">
@@ -140,13 +121,7 @@ export function NotesManagement({ userRole }: NotesManagementProps) {
                     <Badge variant="outline">{note.type}</Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge
-                      variant={
-                        note.status === "Published" ? "default" : "secondary"
-                      }
-                    >
-                      {note.status}
-                    </Badge>
+                    <Badge variant={note.status === "Published" ? "default" : "secondary"}>{note.status}</Badge>
                   </TableCell>
                   <TableCell>
                     <div className="flex space-x-2">
@@ -172,5 +147,5 @@ export function NotesManagement({ userRole }: NotesManagementProps) {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

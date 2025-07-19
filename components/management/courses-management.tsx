@@ -1,32 +1,19 @@
-"use client";
+"use client"
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Edit, Plus, Search, Trash2, Users } from "lucide-react";
-import { useState } from "react";
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Plus, Search, Edit, Trash2, Users } from "lucide-react"
 
 interface CoursesManagementProps {
-  userRole: string;
+  userRole: string
 }
 
 export function CoursesManagement({ userRole }: CoursesManagementProps) {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("")
 
   // Mock data
   const courses = [
@@ -66,25 +53,21 @@ export function CoursesManagement({ userRole }: CoursesManagementProps) {
       credits: 3,
       status: "Inactive",
     },
-  ];
+  ]
 
   const filteredCourses = courses.filter(
     (course) =>
       course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       course.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.teacher.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      course.teacher.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">
-            Courses Management
-          </h2>
-          <p className="text-muted-foreground">
-            Manage course catalog and assignments
-          </p>
+          <h2 className="text-3xl font-bold tracking-tight">Courses Management</h2>
+          <p className="text-muted-foreground">Manage course catalog and assignments</p>
         </div>
         {(userRole === "admin" || userRole === "teacher") && (
           <Button>
@@ -97,9 +80,7 @@ export function CoursesManagement({ userRole }: CoursesManagementProps) {
       <Card>
         <CardHeader>
           <CardTitle>Course Catalog</CardTitle>
-          <CardDescription>
-            View and manage all available courses
-          </CardDescription>
+          <CardDescription>View and manage all available courses</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-2 mb-4">
@@ -121,9 +102,7 @@ export function CoursesManagement({ userRole }: CoursesManagementProps) {
                 <TableHead>Students</TableHead>
                 <TableHead>Credits</TableHead>
                 <TableHead>Status</TableHead>
-                {(userRole === "admin" || userRole === "teacher") && (
-                  <TableHead>Actions</TableHead>
-                )}
+                {(userRole === "admin" || userRole === "teacher") && <TableHead>Actions</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -142,13 +121,7 @@ export function CoursesManagement({ userRole }: CoursesManagementProps) {
                   </TableCell>
                   <TableCell>{course.credits}</TableCell>
                   <TableCell>
-                    <Badge
-                      variant={
-                        course.status === "Active" ? "default" : "secondary"
-                      }
-                    >
-                      {course.status}
-                    </Badge>
+                    <Badge variant={course.status === "Active" ? "default" : "secondary"}>{course.status}</Badge>
                   </TableCell>
                   {(userRole === "admin" || userRole === "teacher") && (
                     <TableCell>
@@ -171,5 +144,5 @@ export function CoursesManagement({ userRole }: CoursesManagementProps) {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }
