@@ -1,34 +1,47 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { setAuthCookie } from "@/lib/auth";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import type React from "react";
+import { useState } from "react";
 
 export function SignUpForm() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [fullName, setFullName] = useState("")
-  const [role, setRole] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [success, setSuccess] = useState("")
-  const router = useRouter()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [role, setRole] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const router = useRouter();
 
   const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
-    setSuccess("")
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess("");
 
     // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     try {
       // In a real app, this would create a user in the database
@@ -37,21 +50,23 @@ export function SignUpForm() {
         role,
         name: fullName,
         id: Date.now().toString(),
-      }
+      };
 
-      // Store user data in localStorage for demo
-      localStorage.setItem("currentUser", JSON.stringify(newUser))
-      setSuccess("Account created successfully! Redirecting...")
+      // Set authentication cookie and localStorage
+      setAuthCookie(newUser);
+
+      setSuccess("Account created successfully! Redirecting...");
 
       setTimeout(() => {
-        router.push("/dashboard")
-      }, 2000)
+        router.push("/dashboard");
+        router.refresh();
+      }, 2000);
     } catch (error) {
-      setError("An unexpected error occurred")
+      setError("An unexpected error occurred");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Card className="w-full">
@@ -137,5 +152,5 @@ export function SignUpForm() {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }

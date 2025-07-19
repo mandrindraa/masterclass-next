@@ -1,19 +1,32 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Plus, Search, Edit, Trash2 } from "lucide-react"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Edit, Plus, Search, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 interface TeachersManagementProps {
-  userRole: string
+  userRole: string;
 }
 
 export function TeachersManagement({ userRole }: TeachersManagementProps) {
-  const [searchTerm, setSearchTerm] = useState("")
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Mock data
   const teachers = [
@@ -49,30 +62,36 @@ export function TeachersManagement({ userRole }: TeachersManagementProps) {
       courses: 2,
       status: "Inactive",
     },
-  ]
+  ];
 
   const filteredTeachers = teachers.filter(
     (teacher) =>
       teacher.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       teacher.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      teacher.department.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+      teacher.department.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (userRole !== "admin") {
     return (
       <div className="text-center py-12">
         <h3 className="text-lg font-medium">Access Denied</h3>
-        <p className="text-muted-foreground">You don't have permission to view this page.</p>
+        <p className="text-muted-foreground">
+          You don't have permission to view this page.
+        </p>
       </div>
-    )
+    );
   }
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Teachers Management</h2>
-          <p className="text-muted-foreground">Manage teacher records and assignments</p>
+          <h2 className="text-3xl font-bold tracking-tight">
+            Teachers Management
+          </h2>
+          <p className="text-muted-foreground">
+            Manage teacher records and assignments
+          </p>
         </div>
         <Button>
           <Plus className="mr-2 h-4 w-4" />
@@ -117,7 +136,13 @@ export function TeachersManagement({ userRole }: TeachersManagementProps) {
                     <Badge variant="outline">{teacher.courses} courses</Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant={teacher.status === "Active" ? "default" : "secondary"}>{teacher.status}</Badge>
+                    <Badge
+                      variant={
+                        teacher.status === "Active" ? "default" : "secondary"
+                      }
+                    >
+                      {teacher.status}
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     <div className="flex space-x-2">
@@ -136,5 +161,5 @@ export function TeachersManagement({ userRole }: TeachersManagementProps) {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

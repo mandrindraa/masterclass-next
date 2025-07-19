@@ -1,19 +1,32 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Plus, Search, Edit, Trash2, MapPin } from "lucide-react"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Edit, MapPin, Plus, Search, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 interface ClassroomsManagementProps {
-  userRole: string
+  userRole: string;
 }
 
 export function ClassroomsManagement({ userRole }: ClassroomsManagementProps) {
-  const [searchTerm, setSearchTerm] = useState("")
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Mock data
   const classrooms = [
@@ -49,30 +62,36 @@ export function ClassroomsManagement({ userRole }: ClassroomsManagementProps) {
       equipment: "Projector, Sound System",
       status: "Maintenance",
     },
-  ]
+  ];
 
   const filteredClassrooms = classrooms.filter(
     (classroom) =>
       classroom.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       classroom.building.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      classroom.equipment.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+      classroom.equipment.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (userRole === "student") {
     return (
       <div className="text-center py-12">
         <h3 className="text-lg font-medium">Access Denied</h3>
-        <p className="text-muted-foreground">You don't have permission to view this page.</p>
+        <p className="text-muted-foreground">
+          You don't have permission to view this page.
+        </p>
       </div>
-    )
+    );
   }
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Classrooms Management</h2>
-          <p className="text-muted-foreground">Manage classroom assignments and resources</p>
+          <h2 className="text-3xl font-bold tracking-tight">
+            Classrooms Management
+          </h2>
+          <p className="text-muted-foreground">
+            Manage classroom assignments and resources
+          </p>
         </div>
         {userRole === "admin" && (
           <Button>
@@ -85,7 +104,9 @@ export function ClassroomsManagement({ userRole }: ClassroomsManagementProps) {
       <Card>
         <CardHeader>
           <CardTitle>Classroom Directory</CardTitle>
-          <CardDescription>View and manage all available classrooms</CardDescription>
+          <CardDescription>
+            View and manage all available classrooms
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-2 mb-4">
@@ -122,15 +143,17 @@ export function ClassroomsManagement({ userRole }: ClassroomsManagementProps) {
                   <TableCell>
                     <Badge variant="outline">{classroom.capacity} seats</Badge>
                   </TableCell>
-                  <TableCell className="max-w-xs truncate">{classroom.equipment}</TableCell>
+                  <TableCell className="max-w-xs truncate">
+                    {classroom.equipment}
+                  </TableCell>
                   <TableCell>
                     <Badge
                       variant={
                         classroom.status === "Available"
                           ? "default"
                           : classroom.status === "Occupied"
-                            ? "destructive"
-                            : "secondary"
+                          ? "destructive"
+                          : "secondary"
                       }
                     >
                       {classroom.status}
@@ -155,5 +178,5 @@ export function ClassroomsManagement({ userRole }: ClassroomsManagementProps) {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

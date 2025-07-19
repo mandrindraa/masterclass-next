@@ -1,8 +1,7 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,34 +9,37 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { LogOut, Settings, UserIcon } from "lucide-react"
+} from "@/components/ui/dropdown-menu";
+import { signOut } from "@/lib/auth";
+import { LogOut, Settings, UserIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface User {
-  email: string
-  role: string
-  name: string
-  id: string
+  email: string;
+  role: string;
+  name: string;
+  id: string;
 }
 
 interface HeaderProps {
-  user: User
+  user: User;
 }
 
 export function Header({ user }: HeaderProps) {
-  const router = useRouter()
+  const router = useRouter();
 
   const handleSignOut = () => {
-    localStorage.removeItem("currentUser")
-    router.push("/auth/signin")
-  }
+    signOut();
+    router.push("/auth/signin");
+    router.refresh();
+  };
 
   const userInitials =
     user.name
       ?.split(" ")
       .map((n: string) => n[0])
       .join("")
-      .toUpperCase() || user.email?.[0].toUpperCase()
+      .toUpperCase() || user.email?.[0].toUpperCase();
 
   return (
     <header className="bg-white shadow-sm border-b px-6 py-4">
@@ -59,8 +61,12 @@ export function Header({ user }: HeaderProps) {
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{user.name}</p>
-                  <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                  <p className="text-sm font-medium leading-none">
+                    {user.name}
+                  </p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {user.email}
+                  </p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
@@ -82,5 +88,5 @@ export function Header({ user }: HeaderProps) {
         </div>
       </div>
     </header>
-  )
+  );
 }
