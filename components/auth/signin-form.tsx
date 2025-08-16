@@ -1,34 +1,40 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import { useRouter, useSearchParams, useParams } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { useTranslations } from "next-intl"
-import { LanguageSwitcher } from "@/components/language-switcher"
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import type React from "react";
+import { useState } from "react";
 
 export function SignInForm() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const params = useParams()
-  const locale = params.locale as string
-  const redirectTo = searchParams.get("redirect") || `/${locale}/dashboard`
-  const t = useTranslations("auth")
-  const tCommon = useTranslations("common")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = useParams();
+  const locale = params.locale as string;
+  const redirectTo = searchParams.get("redirect") || `/${locale}/dashboard`;
+  const t = useTranslations("auth");
+  const tCommon = useTranslations("common");
 
   const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
     try {
       const response = await fetch("/api/auth/signin", {
@@ -37,26 +43,27 @@ export function SignInForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (response.ok) {
+        console.log(data);
         // Store user data in localStorage for client-side access
-        localStorage.setItem("currentUser", JSON.stringify(data.user))
+        localStorage.setItem("currentUser", JSON.stringify(data.user));
 
         // Redirect to intended page or dashboard
-        router.push(redirectTo)
-        router.refresh()
+        router.push(redirectTo);
+        router.refresh();
       } else {
-        setError(data.error || t("invalidCredentials"))
+        setError(data.error || t("invalidCredentials"));
       }
     } catch (error) {
-      setError(t("invalidCredentials"))
+      setError(t("invalidCredentials"));
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Card className="w-full">
@@ -77,7 +84,9 @@ export function SignInForm() {
         )}
 
         <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-          <p className="text-sm text-blue-800 font-medium">{t("demoAccounts")}</p>
+          <p className="text-sm text-blue-800 font-medium">
+            {t("demoAccounts")}
+          </p>
           <div className="text-xs text-blue-700 mt-2 space-y-1">
             <div>{t("admin")}: admin@school.edu / admin123</div>
             <div>{t("teacher")}: sarah.wilson@school.edu / teacher123</div>
@@ -122,12 +131,15 @@ export function SignInForm() {
 
           <div className="text-center text-sm">
             {t("dontHaveAccount")}{" "}
-            <Link href={`/${locale}/auth/signup`} className="text-primary hover:underline">
+            <Link
+              href={`/${locale}/auth/signup`}
+              className="text-primary hover:underline"
+            >
               {t("signup")}
             </Link>
           </div>
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }
