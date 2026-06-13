@@ -1,0 +1,291 @@
+// School Management System – Prisma Schema
+// Malagasy /20 grading system · Role-based access · QR attendance
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  SURVEILLANT
+  TEACHER
+  STUDENT
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+}
+
+enum PeriodType {
+  BIMESTER
+  TRIMESTER
+}
+
+enum AttendanceSlot {
+  MORNING
+  AFTERNOON
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+}
+
+// ─── Users & Roles ────────────────────────────────────────────────────────────
+
+model User {
+  id           String     @id @default(uuid())
+  email        String     @unique
+  passwordHash String     @map("password_hash")
+  role         Role
+  status       UserStatus @default(PENDING)
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  teacher Teacher?
+  student Student?
+
+  // Surveillant who validates teachers
+  validatedTeachers Teacher[] @relation("ValidatedBy")
+
+  // Surveillant who records attendance sessions
+  attendanceSessions AttendanceSession[] @relation("RecordedBy")
+
+  @@map("users")
+}
+
+// ─── School Structure ─────────────────────────────────────────────────────────
+
+model AcademicYear {
+  id          String     @id @default(uuid())
+  label       String // e.g. "2024-2025"
+  periodType  PeriodType @map("period_type")
+  periodCount Int        @map("period_count") // 2 or 3 (derived from periodType)
+  startDate   DateTime   @map("start_date") @db.Date
+  endDate     DateTime   @map("end_date") @db.Date
+  isActive    Boolean    @default(false) @map("is_active")
+
+  periods              Period[]
+  classes              Class[]
+  teacherClassSubjects TeacherClassSubject[]
+  students             Student[]
+
+  @@map("academic_years")
+}
+
+model Period {
+  id             String       @id @default(uuid())
+  academicYearId String       @map("academic_year_id")
+  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Cascade)
+  number         Int // 1..5 (bimester) or 1..3 (trimester)
+  label          String // e.g. "Bimestre 1"
+  startDate      DateTime     @map("start_date") @db.Date
+  endDate        DateTime     @map("end_date") @db.Date
+
+  courses            Course[]
+  grades             Grade[]
+  attendanceSessions AttendanceSession[]
+
+  @@unique([academicYearId, number])
+  @@map("periods")
+}
+
+model Class {
+  id             String       @id @default(uuid())
+  name           String // e.g. "Terminale A"
+  level          String // e.g. "Première"
+  academicYearId String       @map("academic_year_id")
+  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Cascade)
+
+  classSubjects        ClassSubject[]
+  students             Student[]
+  teacherClassSubjects TeacherClassSubject[]
+  attendanceSessions   AttendanceSession[]
+
+  @@map("classes")
+}
+
+model Subject {
+  id          String @id @default(uuid())
+  name        String // e.g. "Mathématiques"
+  coefficient Int    @default(1) // 1..5+
+
+  classSubjects        ClassSubject[]
+  teacherClassSubjects TeacherClassSubject[]
+
+  @@map("subjects")
+}
+
+model ClassSubject {
+  id        String  @id @default(uuid())
+  classId   String  @map("class_id")
+  class     Class   @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subjectId String  @map("subject_id")
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@unique([classId, subjectId])
+  @@map("class_subjects")
+}
+
+// ─── Teacher ──────────────────────────────────────────────────────────────────
+
+model Teacher {
+  id          String    @id @default(uuid())
+  userId      String    @unique @map("user_id")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName   String    @map("first_name")
+  lastName    String    @map("last_name")
+  phone       String?
+  validatedAt DateTime? @map("validated_at")
+  validatedBy String?   @map("validated_by")
+  validator   User?     @relation("ValidatedBy", fields: [validatedBy], references: [id])
+
+  teacherClassSubjects TeacherClassSubject[]
+
+  @@map("teachers")
+}
+
+model TeacherClassSubject {
+  id             String       @id @default(uuid())
+  teacherId      String       @map("teacher_id")
+  teacher        Teacher      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  classId        String       @map("class_id")
+  class          Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subjectId      String       @map("subject_id")
+  subject        Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  academicYearId String       @map("academic_year_id")
+  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Cascade)
+
+  courses Course[]
+  grades  Grade[]
+
+  @@unique([teacherId, classId, subjectId, academicYearId])
+  @@map("teacher_class_subjects")
+}
+
+// ─── Student ──────────────────────────────────────────────────────────────────
+
+model Student {
+  id             String       @id @default(uuid())
+  userId         String       @unique @map("user_id")
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName      String       @map("first_name")
+  lastName       String       @map("last_name")
+  studentCode    String       @unique @map("student_code") // Used to generate QR e.g. STU-2025-00042
+  birthDate      DateTime?    @map("birth_date") @db.Date
+  classId        String       @map("class_id")
+  class          Class        @relation(fields: [classId], references: [id])
+  academicYearId String       @map("academic_year_id")
+  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id])
+
+  grades            Grade[]
+  attendanceRecords AttendanceRecord[]
+  absenceAlerts     AbsenceAlert[]
+
+  @@map("students")
+}
+
+// ─── Courses & Materials ──────────────────────────────────────────────────────
+
+model Course {
+  id                    String              @id @default(uuid())
+  teacherClassSubjectId String              @map("teacher_class_subject_id")
+  teacherClassSubject   TeacherClassSubject @relation(fields: [teacherClassSubjectId], references: [id], onDelete: Cascade)
+  periodId              String              @map("period_id")
+  period                Period              @relation(fields: [periodId], references: [id])
+  title                 String
+  description           String?
+  createdAt             DateTime            @default(now()) @map("created_at")
+
+  materials CourseMaterial[]
+
+  @@map("courses")
+}
+
+model CourseMaterial {
+  id         String   @id @default(uuid())
+  courseId   String   @map("course_id")
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  fileName   String   @map("file_name")
+  filePath   String   @map("file_path") // Relative path in /uploads
+  mimeType   String   @map("mime_type")
+  fileSize   Int      @map("file_size")
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
+
+  @@map("course_materials")
+}
+
+// ─── Grades ───────────────────────────────────────────────────────────────────
+
+model Grade {
+  id                    String              @id @default(uuid())
+  studentId             String              @map("student_id")
+  student               Student             @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  teacherClassSubjectId String              @map("teacher_class_subject_id")
+  teacherClassSubject   TeacherClassSubject @relation(fields: [teacherClassSubjectId], references: [id], onDelete: Cascade)
+  periodId              String              @map("period_id")
+  period                Period              @relation(fields: [periodId], references: [id])
+  score                 Decimal             @db.Decimal(4, 2) // 0.00 – 20.00
+  comment               String?
+  gradedAt              DateTime            @default(now()) @map("graded_at")
+
+  @@unique([studentId, teacherClassSubjectId, periodId])
+  @@map("grades")
+}
+
+// ─── Attendance ───────────────────────────────────────────────────────────────
+
+model AttendanceSession {
+  id         String         @id @default(uuid())
+  classId    String         @map("class_id")
+  class      Class          @relation(fields: [classId], references: [id])
+  periodId   String         @map("period_id")
+  period     Period         @relation(fields: [periodId], references: [id])
+  date       DateTime       @db.Date
+  slot       AttendanceSlot
+  recordedBy String         @map("recorded_by")
+  recorder   User           @relation("RecordedBy", fields: [recordedBy], references: [id])
+  isClosed   Boolean        @default(false) @map("is_closed")
+  createdAt  DateTime       @default(now()) @map("created_at")
+
+  records AttendanceRecord[]
+
+  @@unique([classId, date, slot])
+  @@map("attendance_sessions")
+}
+
+model AttendanceRecord {
+  id                  String            @id @default(uuid())
+  attendanceSessionId String            @map("attendance_session_id")
+  attendanceSession   AttendanceSession @relation(fields: [attendanceSessionId], references: [id], onDelete: Cascade)
+  studentId           String            @map("student_id")
+  student             Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  status              AttendanceStatus
+  scannedAt           DateTime          @default(now()) @map("scanned_at")
+
+  absenceAlert AbsenceAlert?
+
+  @@unique([attendanceSessionId, studentId])
+  @@map("attendance_records")
+}
+
+model AbsenceAlert {
+  id                  String           @id @default(uuid())
+  studentId           String           @map("student_id")
+  student             Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  attendanceRecordId  String           @unique @map("attendance_record_id")
+  attendanceRecord    AttendanceRecord @relation(fields: [attendanceRecordId], references: [id], onDelete: Cascade)
+  acknowledged        Boolean          @default(false)
+  sentAt              DateTime         @default(now()) @map("sent_at")
+
+  @@map("absence_alerts")
+}
