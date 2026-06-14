@@ -1,5 +1,5 @@
 /**
- * proxy.ts  (Next.js 16 — renamed from middleware.ts)
+ * proxy.ts
  * Route guard — redirects unauthenticated users to /login
  * and enforces role-based access to dashboard sections.
  *
@@ -8,8 +8,8 @@
  */
 
 import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 const ROLE_PATHS: Record<string, string> = {
   SURVEILLANT: "/dashboard/surveillant",
@@ -50,13 +50,28 @@ export async function proxy(req: NextRequest) {
 
   // Role-based path protection
   if (path.startsWith("/dashboard/surveillant") && role !== "SURVEILLANT") {
-    return NextResponse.redirect(new URL(role ? (ROLE_PATHS[role] ?? "/login") : "/login", req.nextUrl.origin));
+    return NextResponse.redirect(
+      new URL(
+        role ? (ROLE_PATHS[role] ?? "/login") : "/login",
+        req.nextUrl.origin,
+      ),
+    );
   }
   if (path.startsWith("/dashboard/teacher") && role !== "TEACHER") {
-    return NextResponse.redirect(new URL(role ? (ROLE_PATHS[role] ?? "/login") : "/login", req.nextUrl.origin));
+    return NextResponse.redirect(
+      new URL(
+        role ? (ROLE_PATHS[role] ?? "/login") : "/login",
+        req.nextUrl.origin,
+      ),
+    );
   }
   if (path.startsWith("/dashboard/student") && role !== "STUDENT") {
-    return NextResponse.redirect(new URL(role ? (ROLE_PATHS[role] ?? "/login") : "/login", req.nextUrl.origin));
+    return NextResponse.redirect(
+      new URL(
+        role ? (ROLE_PATHS[role] ?? "/login") : "/login",
+        req.nextUrl.origin,
+      ),
+    );
   }
 
   return NextResponse.next();

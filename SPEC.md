@@ -14,7 +14,7 @@ A web-based school management system serving three roles: **Surveillant**, **Tea
 
 | Layer | Choice | Rationale |
 |---|---|---|
-| Framework | **Next.js 15** (App Router) | Full-stack: UI + API Routes + Server Actions |
+| Framework | **Next.js 16** (App Router) | Full-stack: UI + API Routes + Server Actions |
 | Language | **TypeScript** | Type safety across the whole codebase |
 | Database | **PostgreSQL** | Relational integrity, RLS-ready |
 | ORM | **Prisma** | Schema-first, type-safe queries |
@@ -22,7 +22,7 @@ A web-based school management system serving three roles: **Surveillant**, **Tea
 | File Storage | **Local filesystem** (`/uploads`) | Simplest setup; abstracted behind a service layer for future S3/RustFS migration |
 | Styling | **Tailwind CSS + shadcn/ui** | Rapid, consistent UI |
 | QR Codes | **qrcode** (generation) + **html5-qrcode** (scanning) | Client-side scan via camera |
-| Deployment | **Docker + Nginx** | Consistent with your existing VPS setup |
+| Deployment | **Docker + Nginx** | Consistent with my existing setup |
 
 > **Note on RustFS:** The file upload service is abstracted behind a `StorageService` interface. Switching from local disk to RustFS (S3-compatible) later only requires implementing the interface with an S3 SDK — no application logic changes needed.
 
@@ -237,7 +237,7 @@ erDiagram
 ## 5. Authentication & Onboarding Flow
 
 ### 5.1 Surveillant
-- Created via a **seed script** or a protected `/setup` one-time route on first deploy.
+- Created via a **seed script**
 - Always `ACTIVE` from creation.
 
 ### 5.2 Teacher
@@ -478,7 +478,7 @@ A per-student, per-period PDF report card generated server-side using **`@react-
 | Grade table | Subject · Coefficient · Score (/20) · Weighted score · Teacher comment |
 | Period average | `Σ(score × coeff) / Σ(coeff)` displayed as X/20 |
 | Class rank | Dense rank among all students of the same class and period based on period average. Ties share the same rank (e.g., two students at rank 2 → next rank is 3, not 4) |
-| Attendance summary | *(not included per spec — omitted)* |
+| Attendance summary | Number of missed class |
 | Footer | Generated date, surveillant name/signature placeholder |
 
 ### 10.3 Class Rank Computation
