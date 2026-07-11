@@ -80,7 +80,7 @@ function LoginForm() {
               />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold">School Management</h1>
+          <h1 className="text-2xl font-bold">Masterclass</h1>
           <p className="text-muted-foreground text-sm mt-1">Sign in to your account</p>
         </div>
 
