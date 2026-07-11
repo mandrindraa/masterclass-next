@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
@@ -68,23 +68,20 @@ export default function RegisterPage() {
 
   if (success) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-linear-0-to-br from-slate-950 via-slate-900 to-slate-950 px-4">
+      <main className="min-h-screen flex items-center justify-center bg-background px-4">
         <div className="w-full max-w-md text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/20 border border-green-500/30 mb-4">
-            <CheckCircle2 className="w-8 h-8 text-green-400" />
+          <div className="inline-flex items-center justify-center size-16 rounded-full bg-accent mb-4">
+            <CheckCircle2 className="size-8 text-accent-foreground" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">
+          <h2 className="text-2xl font-bold mb-2">
             Registration Successful!
           </h2>
-          <p className="text-slate-400 mb-6">
+          <p className="text-muted-foreground mb-6">
             Your account is pending validation by the school surveillant. You
             will be notified once it is approved.
           </p>
-          <Link
-            href="/login"
-            className="inline-block py-2.5 px-6 bg-primary hover:bg-primary/90 text-white font-semibold rounded-md transition"
-          >
-            Back to Login
+          <Link href="/login">
+            <Button className="w-full">Back to Login</Button>
           </Link>
         </div>
       </main>
@@ -92,12 +89,12 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 py-10">
+    <main className="min-h-screen flex items-center justify-center bg-background px-4 py-10">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary shadow-lg mb-4">
+          <div className="inline-flex items-center justify-center size-16 rounded-lg bg-primary mb-4">
             <svg
-              className="w-8 h-8 text-white"
+              className="size-8 text-primary-foreground"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -116,156 +113,147 @@ export default function RegisterPage() {
               />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-white">
+          <h1 className="text-2xl font-bold">
             Teacher Registration
           </h1>
-          <p className="text-slate-400 text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1">
             Create your account to get started
           </p>
         </div>
 
-        <Card className="border-slate-700/50 bg-slate-900/60 backdrop-blur-sm shadow-2xl p-8">
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-4"
-            id="register-form"
-          >
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName" className="text-slate-300">
-                  First name
-                </Label>
-                <Input
-                  id="firstName"
-                  name="firstName"
-                  type="text"
-                  required
-                  value={form.firstName}
-                  onChange={handleChange}
-                  placeholder="Jean"
-                  className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lastName" className="text-slate-300">
-                  Last name
-                </Label>
-                <Input
-                  id="lastName"
-                  name="lastName"
-                  type="text"
-                  required
-                  value={form.lastName}
-                  onChange={handleChange}
-                  placeholder="Rakoto"
-                  className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="reg-email" className="text-slate-300">
-                Email address
-              </Label>
-              <Input
-                id="reg-email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={form.email}
-                onChange={handleChange}
-                placeholder="teacher@school.mg"
-                className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="phone" className="text-slate-300">
-                Phone{" "}
-                <span className="text-slate-500 font-normal">(optional)</span>
-              </Label>
-              <Input
-                id="phone"
-                name="phone"
-                type="tel"
-                value={form.phone}
-                onChange={handleChange}
-                placeholder="+261 34 00 000 00"
-                className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="reg-password" className="text-slate-300">
-                Password
-              </Label>
-              <Input
-                id="reg-password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                required
-                value={form.password}
-                onChange={handleChange}
-                placeholder="Min. 8 characters"
-                className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-slate-300">
-                Confirm password
-              </Label>
-              <Input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                autoComplete="new-password"
-                required
-                value={form.confirmPassword}
-                onChange={handleChange}
-                placeholder="Repeat your password"
-                className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
-              />
-            </div>
-
-            {error && (
-              <Alert
-                variant="destructive"
-                className="border-red-500/30 bg-red-500/10 text-red-400"
-              >
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            <Button
-              id="register-submit"
-              type="submit"
-              disabled={loading}
-              className="w-full mt-2"
+        <Card>
+          <CardHeader className="space-y-1">
+            <CardTitle>Register</CardTitle>
+            <CardDescription>Create your account to access the system</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-4"
+              id="register-form"
             >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Creating account…
-                </span>
-              ) : (
-                "Create account"
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">
+                    First name
+                  </Label>
+                  <Input
+                    id="firstName"
+                    name="firstName"
+                    type="text"
+                    required
+                    value={form.firstName}
+                    onChange={handleChange}
+                    placeholder="Jean"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">
+                    Last name
+                  </Label>
+                  <Input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    required
+                    value={form.lastName}
+                    onChange={handleChange}
+                    placeholder="Rakoto"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="reg-email">
+                  Email address
+                </Label>
+                <Input
+                  id="reg-email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="teacher@school.mg"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="phone">
+                  Phone{" "}
+                  <span className="text-muted-foreground font-normal">(optional)</span>
+                </Label>
+                <Input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  value={form.phone}
+                  onChange={handleChange}
+                  placeholder="+261 34 00 000 00"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="reg-password">
+                  Password
+                </Label>
+                <Input
+                  id="reg-password"
+                  name="password"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  value={form.password}
+                  onChange={handleChange}
+                  placeholder="Min. 8 characters"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">
+                  Confirm password
+                </Label>
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  value={form.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Repeat your password"
+                />
+              </div>
+
+              {error && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
               )}
-            </Button>
-          </form>
 
-          <div className="mt-6 text-center text-sm text-slate-400">
-            Already have an account?{" "}
-            <Link
-              href="/login"
-              className="text-primary hover:underline font-medium transition"
-            >
-              Sign in
-            </Link>
-          </div>
+              <Button
+                id="register-submit"
+                type="submit"
+                disabled={loading}
+                className="w-full"
+              >
+                {loading && <Loader2 className="h-4 w-4 animate-spin" data-icon="inline-start" />}
+                {loading ? "Creating account…" : "Create account"}
+              </Button>
+            </form>
+
+            <div className="mt-4 text-center text-sm text-muted-foreground">
+              Already have an account?{" "}
+              <Link
+                href="/login"
+                className="font-medium text-primary hover:underline"
+              >
+                Sign in
+              </Link>
+            </div>
+          </CardContent>
         </Card>
       </div>
     </main>

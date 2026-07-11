@@ -10,12 +10,12 @@ export function DashboardHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm">
+    <header className="border-b border-border bg-card">
       <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-3">
-          <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-primary">
+          <div className="inline-flex items-center justify-center size-10 rounded-lg bg-primary">
             <svg
-              className="w-6 h-6 text-white"
+              className="size-6 text-primary-foreground"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -28,7 +28,7 @@ export function DashboardHeader() {
               />
             </svg>
           </div>
-          <span className="text-lg font-semibold text-white">School Management</span>
+          <span className="text-lg font-semibold">School Management</span>
         </div>
 
         <div className="flex items-center gap-4">
@@ -39,8 +39,8 @@ export function DashboardHeader() {
               signOut({ redirectTo: "/login" });
             }}
           >
-            <LogOut className="h-4 w-4 mr-2" />
-            Sign out
+            <LogOut className="h-4 w-4" data-icon="inline-start" />
+            <span>Sign out</span>
           </Button>
         </div>
       </div>
@@ -61,9 +61,9 @@ interface DashboardSidebarProps {
 
 export function DashboardSidebar({ links, role }: DashboardSidebarProps) {
   return (
-    <aside className="w-64 border-r border-slate-800 bg-slate-950 p-6">
+    <aside className="w-64 border-r border-border bg-muted/40 p-6">
       <div className="mb-8">
-        <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">
+        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
           Navigation
         </h2>
         <nav className="space-y-2">
@@ -71,7 +71,7 @@ export function DashboardSidebar({ links, role }: DashboardSidebarProps) {
             <Link
               key={link.href}
               href={link.href}
-              className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+              className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-muted-foreground hover:bg-card hover:text-foreground transition-colors"
             >
               {link.icon}
               <span className="text-sm font-medium">{link.label}</span>
@@ -80,11 +80,11 @@ export function DashboardSidebar({ links, role }: DashboardSidebarProps) {
         </nav>
       </div>
 
-      <div className="pt-6 border-t border-slate-800">
-        <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-2">
+      <div className="pt-6 border-t border-border">
+        <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-2">
           Role
         </p>
-        <p className="text-sm text-slate-400 capitalize">{role.toLowerCase()}</p>
+        <p className="text-sm text-muted-foreground capitalize">{role.toLowerCase()}</p>
       </div>
     </aside>
   );

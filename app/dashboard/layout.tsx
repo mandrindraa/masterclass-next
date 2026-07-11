@@ -126,7 +126,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-background">
       <DashboardHeader />
       <div className="flex">
         <DashboardSidebar links={navLinks} role={role} />

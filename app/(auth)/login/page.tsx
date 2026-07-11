@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import { AlertCircle, Loader2 } from "lucide-react";
@@ -56,13 +56,12 @@ function LoginForm() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4">
+    <main className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-md">
-        {/* Logo / Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary shadow-lg mb-4">
+          <div className="inline-flex items-center justify-center size-16 rounded-lg bg-primary mb-4">
             <svg
-              className="w-8 h-8 text-white"
+              className="size-8 text-primary-foreground"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -81,81 +80,71 @@ function LoginForm() {
               />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-white">School Management</h1>
-          <p className="text-slate-400 text-sm mt-1">Sign in to your account</p>
+          <h1 className="text-2xl font-bold">School Management</h1>
+          <p className="text-muted-foreground text-sm mt-1">Sign in to your account</p>
         </div>
 
-        {/* Card */}
-        <Card className="border-slate-700/50 bg-slate-900/60 backdrop-blur-sm shadow-2xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-5" id="login-form">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-slate-300">
-                Email address
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@school.mg"
-                className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
-              />
-            </div>
+        <Card>
+          <CardHeader className="space-y-1">
+            <CardTitle>Sign In</CardTitle>
+            <CardDescription>Enter your credentials to access your account</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4" id="login-form">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email address</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="admin@school.mg"
+                />
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-slate-300">
-                Password
-              </Label>
-              <Input
-                id="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
-              />
-            </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                />
+              </div>
 
-            {error && (
-              <Alert
-                variant="destructive"
-                className="border-red-500/30 bg-red-500/10 text-red-400"
-              >
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            <Button
-              id="login-submit"
-              type="submit"
-              disabled={loading}
-              className="w-full"
-            >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Signing in…
-                </span>
-              ) : (
-                "Sign in"
+              {error && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
               )}
-            </Button>
-          </form>
 
-          <div className="mt-6 text-center text-sm text-slate-400">
-            Teacher?{" "}
-            <Link
-              href="/register"
-              className="text-primary hover:underline font-medium transition"
-            >
-              Register here
-            </Link>
-          </div>
+              <Button
+                id="login-submit"
+                type="submit"
+                disabled={loading}
+                className="w-full"
+              >
+                {loading && <Loader2 className="h-4 w-4 animate-spin" data-icon="inline-start" />}
+                {loading ? "Signing in…" : "Sign in"}
+              </Button>
+            </form>
+
+            <div className="mt-4 text-center text-sm text-muted-foreground">
+              Teacher?{" "}
+              <Link
+                href="/register"
+                className="font-medium text-primary hover:underline"
+              >
+                Register here
+              </Link>
+            </div>
+          </CardContent>
         </Card>
       </div>
     </main>
@@ -164,8 +153,8 @@ function LoginForm() {
 
 function LoginFallback() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4">
-      <div className="w-full max-w-md text-center text-slate-400 text-sm">
+    <main className="min-h-screen flex items-center justify-center bg-background px-4">
+      <div className="w-full max-w-md text-center text-muted-foreground text-sm">
         Loading…
       </div>
     </main>
