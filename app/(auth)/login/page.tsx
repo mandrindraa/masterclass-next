@@ -4,6 +4,12 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Label } from "@/components/ui/label";
+import { AlertCircle, Loader2 } from "lucide-react";
 
 const ERROR_MESSAGES: Record<string, string> = {
   CredentialsSignin: "Invalid email or password.",
@@ -50,11 +56,11 @@ function LoginForm() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 px-4">
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4">
       <div className="w-full max-w-md">
         {/* Logo / Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-600 shadow-lg shadow-indigo-500/30 mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary shadow-lg mb-4">
             <svg
               className="w-8 h-8 text-white"
               fill="none"
@@ -80,112 +86,77 @@ function LoginForm() {
         </div>
 
         {/* Card */}
-        <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8 shadow-2xl">
+        <Card className="border-slate-700/50 bg-slate-900/60 backdrop-blur-sm shadow-2xl p-8">
           <form onSubmit={handleSubmit} className="space-y-5" id="login-form">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-slate-300 mb-1.5"
-              >
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-slate-300">
                 Email address
-              </label>
-              <input
+              </Label>
+              <Input
                 id="email"
                 type="email"
                 autoComplete="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-lg bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                 placeholder="admin@school.mg"
+                className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
               />
             </div>
 
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-slate-300 mb-1.5"
-              >
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-slate-300">
                 Password
-              </label>
-              <input
+              </Label>
+              <Input
                 id="password"
                 type="password"
                 autoComplete="current-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-lg bg-slate-700/50 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                 placeholder="••••••••"
+                className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
               />
             </div>
 
             {error && (
-              <div
-                id="login-error"
-                role="alert"
-                className="flex items-start gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm"
+              <Alert
+                variant="destructive"
+                className="border-red-500/30 bg-red-500/10 text-red-400"
               >
-                <svg
-                  className="w-4 h-4 mt-0.5 shrink-0"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                {error}
-              </div>
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
             )}
 
-            <button
+            <Button
               id="login-submit"
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all duration-200 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40"
+              className="w-full"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <svg
-                    className="animate-spin h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v8H4z"
-                    />
-                  </svg>
+                  <Loader2 className="h-4 w-4 animate-spin" />
                   Signing in…
                 </span>
               ) : (
                 "Sign in"
               )}
-            </button>
+            </Button>
           </form>
 
           <div className="mt-6 text-center text-sm text-slate-400">
             Teacher?{" "}
             <Link
               href="/register"
-              className="text-indigo-400 hover:text-indigo-300 font-medium transition"
+              className="text-primary hover:underline font-medium transition"
             >
               Register here
             </Link>
           </div>
-        </div>
+        </Card>
       </div>
     </main>
   );
@@ -193,7 +164,7 @@ function LoginForm() {
 
 function LoginFallback() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 px-4">
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4">
       <div className="w-full max-w-md text-center text-slate-400 text-sm">
         Loading…
       </div>

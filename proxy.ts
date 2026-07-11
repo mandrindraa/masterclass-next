@@ -17,7 +17,7 @@ const ROLE_PATHS: Record<string, string> = {
   STUDENT: "/dashboard/student",
 };
 
-const PUBLIC_PATHS = ["/login", "/register", "/api/auth"];
+const PUBLIC_PATHS = ["/login", "/register", "/api/auth", "/"];
 
 export async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
