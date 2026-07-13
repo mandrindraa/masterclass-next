@@ -12,7 +12,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Table,
@@ -108,7 +107,7 @@ export default function StudentsPage() {
     }
   }
 
-  async function handleCreateStudent(e: React.FormEvent) {
+  async function handleCreateStudent(e: React.SubmitEvent) {
     e.preventDefault();
     setError("");
     setSuccess("");

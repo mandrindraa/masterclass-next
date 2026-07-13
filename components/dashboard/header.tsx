@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { LogOut, ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import Icon from "@/components/ui/icon";
 
 export function DashboardHeader() {
   return (
@@ -13,19 +14,7 @@ export function DashboardHeader() {
       <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-3">
           <div className="inline-flex items-center justify-center size-10 rounded-lg bg-primary">
-            <svg
-              className="size-6 text-primary-foreground"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 14l9-5-9-5-9 5 9 5z"
-              />
-            </svg>
+            <Icon />
           </div>
           <span className="text-lg font-semibold">Masterclass</span>
         </div>
@@ -128,7 +117,7 @@ export function DashboardSidebar({ links, role, userEmail }: DashboardSidebarPro
 
       {/* User Profile Section */}
       <Link
-        href="/dashboard/profile"
+        href="/profile"
         className="p-4 border-t border-border hover:bg-card/50 transition-colors"
       >
         {!collapsed && (
