@@ -248,7 +248,7 @@ erDiagram
 5. Teacher can now log in.
 
 ### 5.3 Student
-- Students are **created by the Surveillant** (no self-registration).
+- Students are **created by the Surveillant** (no self-registration). Either by individual creation or bulk import form excel file.
 - A `student_code` is auto-generated (e.g., `STU-2025-00042`) and used as the QR code payload.
 - A default password is set and must be changed on first login.
 
