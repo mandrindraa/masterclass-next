@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${plusJakartaSans.className} dark h-full antialiased bg-background`}>
+    <html lang="en" className={`${plusJakartaSans.className} h-full antialiased bg-background`}>
       <body className="min-h-full flex flex-col bg-background">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={true}>
           <LanguageProvider>{children}</LanguageProvider>
