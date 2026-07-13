@@ -132,16 +132,12 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen flex-col bg-background">
-      <DashboardHeader />
-      <div className="flex flex-1 overflow-hidden">
-        <DashboardSidebar
-          links={navLinks}
-          role={role}
-          userEmail={session.user?.email}
-        />
-        <main className="flex-1 overflow-auto p-8">{children}</main>
+      <div className="flex h-screen flex-col bg-background">
+        <DashboardHeader userEmail={session.user?.email} role={role} />
+        <div className="flex flex-1 overflow-hidden">
+          <DashboardSidebar links={navLinks} role={role} />
+          <main className="flex-1 overflow-auto p-8">{children}</main>
+        </div>
       </div>
-    </div>
-  );
+    );
 }

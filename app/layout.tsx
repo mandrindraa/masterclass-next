@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
+import { LanguageProvider } from "@/lib/i18n";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -24,8 +26,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${plusJakartaSans.className} h-full antialiased bg-background`}>
-      <body className="min-h-full flex flex-col bg-background">{children}</body>
+    <html lang="en" className={`${plusJakartaSans.className} dark h-full antialiased bg-background`}>
+      <body className="min-h-full flex flex-col bg-background">
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={true}>
+          <LanguageProvider>{children}</LanguageProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

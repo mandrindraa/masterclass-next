@@ -12,6 +12,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Table,
@@ -21,9 +22,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Pencil, Trash2, AlertCircle, Loader2, FileEdit, FileDown } from "lucide-react";
+import { Plus, Pencil, Trash2, AlertCircle, Loader2, FileDown, FileEdit} from "lucide-react";
 import { NavTitle } from "@/components/ui/nav-title";
-import FeedbackModal from "@/components/ui/feedback";
 
 interface Student {
   id: string;
@@ -44,17 +44,6 @@ interface Student {
   };
 }
 
-interface Class {
-  name: string;
-  level: string;
-  id: string;
-}
-
-interface AcademicYear {
-  label: string;
-  id: string;
-}
-
 interface CreateStudentForm {
   firstName: string;
   lastName: string;
@@ -66,17 +55,18 @@ interface CreateStudentForm {
 
 export default function StudentsPage() {
   const [students, setStudents] = useState<Student[]>([]);
-  const [classes, setClasses] = useState<Class[]>([]);
-  const [academicYears, setAcademicYears] = useState<AcademicYear[]>([]);
+  const [classes, setClasses] = useState<any[]>([]);
+  const [academicYears, setAcademicYears] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false)
-  const [confirmDeletion, setConfirmDeletion] = useState(false)
 
+  // Custom delete confirmation state
+  const [studentToDelete, setStudentToDelete] = useState<Student | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const [formData, setFormData] = useState<CreateStudentForm>({
     firstName: "",
@@ -161,19 +151,42 @@ export default function StudentsPage() {
     }
   }
 
-  async function handleDeleteStudent(id: string) {
-    setConfirmDialogOpen(true);
-    if (!confirmDeletion) return;
+  // Opens the custom confirmation modal instead of window.confirm()
+  function requestDeleteStudent(student: Student) {
+    setError("");
+    setSuccess("");
+    setStudentToDelete(student);
+  }
+
+  // Runs the actual delete once the user confirms in the modal
+  async function confirmDeleteStudent() {
+    if (!studentToDelete) return;
+    const id = studentToDelete.id;
+
+    setIsDeleting(true);
+    setError("");
 
     try {
       const res = await fetch(`/api/students/${id}`, { method: "DELETE" });
 
-      if (!res.ok) throw new Error("Failed to delete student");
+      if (!res.ok) {
+        let message = "Failed to delete student";
+        try {
+          const data = await res.json();
+          message = data?.message || message;
+        } catch {
+          // response body wasn't JSON, keep default message
+        }
+        throw new Error(message);
+      }
 
-      setStudents(students.filter((s) => s.id !== id));
+      setStudents((prev) => prev.filter((s) => s.id !== id));
       setSuccess("Student deleted successfully!");
+      setStudentToDelete(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setIsDeleting(false);
     }
   }
 
@@ -363,6 +376,66 @@ export default function StudentsPage() {
               </div>
             </form>
           </DialogContent>
+        </Dialog>
+
+      {/* Custom delete confirmation modal, replaces window.confirm() */}
+      <Dialog
+        open={!!studentToDelete}
+        onOpenChange={(open) => {
+          if (!open && !isDeleting) setStudentToDelete(null);
+        }}
+      >
+        <DialogContent className="bg-slate-900 border-slate-800">
+          <DialogHeader>
+            <DialogTitle className="text-white">Delete Student</DialogTitle>
+            <DialogDescription className="text-slate-400">
+              {studentToDelete && (
+                <>
+                  Are you sure you want to delete{" "}
+                  <span className="text-white font-medium">
+                    {studentToDelete.firstName} {studentToDelete.lastName}
+                  </span>
+                  ? This action cannot be undone.
+                </>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+
+          {error && (
+            <Alert
+              variant="destructive"
+              className="border-red-500/30 bg-red-500/10 text-red-400"
+            >
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
+          <div className="flex gap-3 pt-4">
+            <Button
+              variant="destructive"
+              className="flex-1"
+              onClick={confirmDeleteStudent}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              ) : (
+                <Trash2 className="h-4 w-4 mr-2" />
+              )}
+              Delete
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="flex-1"
+              onClick={() => setStudentToDelete(null)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+          </div>
+        </DialogContent>
       </Dialog>
 
       {success && (
@@ -372,7 +445,7 @@ export default function StudentsPage() {
         </Alert>
       )}
 
-      {error && (
+      {error && !studentToDelete && (
         <Alert
           variant="destructive"
           className="border-red-500/30 bg-red-500/10 text-red-400"
@@ -381,18 +454,6 @@ export default function StudentsPage() {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
-
-      {confirmDialogOpen &&
-        <FeedbackModal
-        closeLabel="Cancel"
-        title="Delete student"
-        isOpen={confirmDialogOpen}
-        confirmLabel="Confirm"
-        message="Are you sure you want to delete this student?"
-        onConfirm={() => setConfirmDeletion(true)}
-        onCancel={() => { setConfirmDeletion(false);  setConfirmDialogOpen(false)}}
-        />
-      }
 
       <div>
         <Input
@@ -428,7 +489,7 @@ export default function StudentsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-                  {filteredStudents.map((student) => (
+              {filteredStudents.map((student) => (
                 <TableRow
                   key={student.id}
                   className="border-slate-800 hover:bg-slate-800/50"
@@ -464,18 +525,16 @@ export default function StudentsPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                            onClick={() => handleDeleteStudent(student.id)}
+                        onClick={() => requestDeleteStudent(student)}
                       >
                         <Trash2 className="h-4 w-4" />
-
                       </Button>
                     </div>
                   </TableCell>
-                      </TableRow>
+                </TableRow>
               ))}
             </TableBody>
           </Table>
-
         )}
       </Card>
     </div>
