@@ -101,8 +101,8 @@ model Period {
 
 model Class {
   id             String       @id @default(uuid())
-  name           String // e.g. "Terminale A"
-  level          String // e.g. "Première"
+  name           String       // e.g. "Terminale A"
+  level          String       @unique // e.g. "Première"
   academicYearId String       @map("academic_year_id")
   academicYear   AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Cascade)
 
