@@ -1,15 +1,13 @@
 "use client";
 
-import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { useLanguage } from "@/lib/i18n";
-import { LogOut, ChevronLeft } from "lucide-react";
+import { UserMenu } from "./user-menu";
+import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Icon from "../ui/icon";
+import { useLanguage } from "@/lib/i18n";
 
 interface DashboardHeaderProps {
   userEmail?: string;
@@ -17,8 +15,6 @@ interface DashboardHeaderProps {
 }
 
 export function DashboardHeader({ userEmail, role }: DashboardHeaderProps) {
-  const { t } = useLanguage();
-
   return (
     <header className="border-b border-border bg-card">
       <div className="flex items-center justify-between px-6 py-4">
@@ -31,35 +27,7 @@ export function DashboardHeader({ userEmail, role }: DashboardHeaderProps) {
 
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
-          <ThemeToggle />
-
-          {/* Profile, moved here from the sidebar bottom-left */}
-          {userEmail && (
-            <Link
-              href="/dashboard/profile"
-              className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-muted transition-colors"
-            >
-              <div className="text-right hidden sm:block">
-                <p className="text-sm font-medium text-foreground truncate max-w-40">
-                  {userEmail}
-                </p>
-                <p className="text-xs text-muted-foreground capitalize">
-                  {role?.toLowerCase()}
-                </p>
-              </div>
-            </Link>
-          )}
-
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              signOut({ redirectTo: "/login" });
-            }}
-          >
-            <LogOut className="h-4 w-4" data-icon="inline-start" />
-            <span>{t("signOut")}</span>
-          </Button>
+          <UserMenu userEmail={userEmail} role={role} />
         </div>
       </div>
     </header>
