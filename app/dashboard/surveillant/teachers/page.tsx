@@ -4,10 +4,9 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Role, UserStatus } from "@/lib/generated/prisma/client";
 import { TeacherTable } from "./teacher-table";
-import { TeacherPagination } from "./teacher-pagination";
+import { PaginationComponent } from "@/components/ui/pagination";
 import { NavTitle } from "@/components/ui/nav-title";
-
-const PAGE_SIZE = 10;
+import { PAGE_SIZE } from "@/constants";
 
 export default async function TeachersPage({
   searchParams,
@@ -53,7 +52,7 @@ export default async function TeachersPage({
 
       <TeacherTable pendingTeachers={pendingTeachers} otherTeachers={otherTeachers} />
 
-      <TeacherPagination
+      <PaginationComponent
         page={page}
         totalPages={totalPages}
         basePath="/dashboard/surveillant/teachers"

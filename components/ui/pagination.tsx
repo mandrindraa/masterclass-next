@@ -2,6 +2,7 @@ import * as React from "react";
 import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { getPageNumbers } from "@/lib/utils/page-number";
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -92,6 +93,57 @@ function PaginationEllipsis({ className, ...props }: React.ComponentProps<"span"
   );
 }
 
+function PaginationComponent({
+  page,
+  totalPages,
+  basePath,
+}: {
+  page: number;
+  totalPages: number;
+  basePath: string;
+}) {
+  if (totalPages <= 1) return null;
+
+  const href = (p: number) => `${basePath}?page=${p}`;
+
+  return (
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem>
+          {page > 1 ? (
+            <PaginationPrevious href={href(page - 1)} />
+          ) : (
+            <PaginationPrevious href={href(page)} className="pointer-events-none opacity-40" />
+          )}
+        </PaginationItem>
+
+        {getPageNumbers(page, totalPages).map((p, i) =>
+          p === "ellipsis" ? (
+            <PaginationItem key={`ellipsis-${i}`}>
+              <PaginationEllipsis />
+            </PaginationItem>
+          ) : (
+            <PaginationItem key={p}>
+              <PaginationLink href={href(p)} isActive={p === page}>
+                {p}
+              </PaginationLink>
+            </PaginationItem>
+          )
+        )}
+
+        <PaginationItem>
+          {page < totalPages ? (
+            <PaginationNext href={href(page + 1)} />
+          ) : (
+            <PaginationNext href={href(page)} className="pointer-events-none opacity-40" />
+          )}
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  );
+}
+
+
 export {
   Pagination,
   PaginationContent,
@@ -100,4 +152,5 @@ export {
   PaginationPrevious,
   PaginationNext,
   PaginationEllipsis,
+  PaginationComponent
 };
