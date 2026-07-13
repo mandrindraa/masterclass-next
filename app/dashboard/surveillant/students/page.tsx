@@ -21,8 +21,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Pencil, Trash2, AlertCircle, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, AlertCircle, Loader2, FileEdit, FileDown } from "lucide-react";
 import { NavTitle } from "@/components/ui/nav-title";
+import FeedbackModal from "@/components/ui/feedback";
 
 interface Student {
   id: string;
@@ -43,6 +44,17 @@ interface Student {
   };
 }
 
+interface Class {
+  name: string;
+  level: string;
+  id: string;
+}
+
+interface AcademicYear {
+  label: string;
+  id: string;
+}
+
 interface CreateStudentForm {
   firstName: string;
   lastName: string;
@@ -54,14 +66,17 @@ interface CreateStudentForm {
 
 export default function StudentsPage() {
   const [students, setStudents] = useState<Student[]>([]);
-  const [classes, setClasses] = useState<unknown[]>([]);
-  const [academicYears, setAcademicYears] = useState<unknown[]>([]);
+  const [classes, setClasses] = useState<Class[]>([]);
+  const [academicYears, setAcademicYears] = useState<AcademicYear[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false)
+  const [confirmDeletion, setConfirmDeletion] = useState(false)
+
 
   const [formData, setFormData] = useState<CreateStudentForm>({
     firstName: "",
@@ -147,7 +162,8 @@ export default function StudentsPage() {
   }
 
   async function handleDeleteStudent(id: string) {
-    if (!confirm("Are you sure you want to delete this student?")) return;
+    setConfirmDialogOpen(true);
+    if (!confirmDeletion) return;
 
     try {
       const res = await fetch(`/api/students/${id}`, { method: "DELETE" });
@@ -190,6 +206,15 @@ export default function StudentsPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <NavTitle h1="Students" h2="Manage student enrollments" />
+        <div>
+          <Button>
+            <FileDown className="h-4 w-4" />
+            Download template file
+        </Button>
+        <Button>
+          <FileEdit className="h-4 w-4" />
+          Import from file
+        </Button>
         <Button
           onClick={() => {
             resetForm();
@@ -199,6 +224,7 @@ export default function StudentsPage() {
           <Plus className="h-4 w-4 mr-2" />
           Add Student
         </Button>
+        </div>
       </div>
 
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
@@ -337,7 +363,7 @@ export default function StudentsPage() {
               </div>
             </form>
           </DialogContent>
-        </Dialog>
+      </Dialog>
 
       {success && (
         <Alert className="border-green-500/30 bg-green-500/10 text-green-400">
@@ -355,6 +381,18 @@ export default function StudentsPage() {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
+
+      {confirmDialogOpen &&
+        <FeedbackModal
+        closeLabel="Cancel"
+        title="Delete student"
+        isOpen={confirmDialogOpen}
+        confirmLabel="Confirm"
+        message="Are you sure you want to delete this student?"
+        onConfirm={() => setConfirmDeletion(true)}
+        onCancel={() => { setConfirmDeletion(false);  setConfirmDialogOpen(false)}}
+        />
+      }
 
       <div>
         <Input
@@ -390,7 +428,7 @@ export default function StudentsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredStudents.map((student) => (
+                  {filteredStudents.map((student) => (
                 <TableRow
                   key={student.id}
                   className="border-slate-800 hover:bg-slate-800/50"
@@ -426,16 +464,18 @@ export default function StudentsPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleDeleteStudent(student.id)}
+                            onClick={() => handleDeleteStudent(student.id)}
                       >
                         <Trash2 className="h-4 w-4" />
+
                       </Button>
                     </div>
                   </TableCell>
-                </TableRow>
+                      </TableRow>
               ))}
             </TableBody>
           </Table>
+
         )}
       </Card>
     </div>
