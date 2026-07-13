@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { NavTitle } from "@/components/ui/nav-title";
 import prisma from "@/lib/prisma";
 
 const stats = async () => {
@@ -14,10 +15,7 @@ export default async function SurveillantDashboard() {
   const data = await stats();
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-white">Surveillant Dashboard</h1>
-        <p className="text-slate-400 mt-1">Welcome to your school management system</p>
-      </div>
+      <NavTitle h1="Surveillant Dashboard" h2="Welcome to your school management system" />
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="bg-slate-900 border-slate-800 p-6">

@@ -22,6 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Plus, Pencil, Trash2, AlertCircle, Loader2 } from "lucide-react";
+import { NavTitle } from "@/components/ui/nav-title";
 
 interface Student {
   id: string;
@@ -53,8 +54,8 @@ interface CreateStudentForm {
 
 export default function StudentsPage() {
   const [students, setStudents] = useState<Student[]>([]);
-  const [classes, setClasses] = useState<any[]>([]);
-  const [academicYears, setAcademicYears] = useState<any[]>([]);
+  const [classes, setClasses] = useState<unknown[]>([]);
+  const [academicYears, setAcademicYears] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -188,10 +189,7 @@ export default function StudentsPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-white">Students</h1>
-          <p className="text-slate-400 mt-1">Manage student enrollments</p>
-        </div>
+        <NavTitle h1="Students" h2="Manage student enrollments" />
         <Button
           onClick={() => {
             resetForm();

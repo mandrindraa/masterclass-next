@@ -10,6 +10,7 @@ import {
   FileText,
   GraduationCap,
   Briefcase,
+  UserRoundCogIcon,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -66,6 +67,11 @@ export default async function DashboardLayout({
         href: "/dashboard/surveillant/report-cards",
         icon: <FileText className="h-5 w-5" />,
       },
+      {
+        label: "Users",
+        href: "/dashboard/surveillant/users",
+        icon : <UserRoundCogIcon className="h-5 w-5" />
+      }
     ];
   } else if (role === "TEACHER") {
     navLinks = [
@@ -129,8 +135,8 @@ export default async function DashboardLayout({
     <div className="flex h-screen flex-col bg-background">
       <DashboardHeader />
       <div className="flex flex-1 overflow-hidden">
-        <DashboardSidebar 
-          links={navLinks} 
+        <DashboardSidebar
+          links={navLinks}
           role={role}
           userEmail={session.user?.email}
         />

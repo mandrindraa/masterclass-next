@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { Role, UserStatus } from "@/lib/generated/prisma/client";
 import { TeacherTable } from "./teacher-table";
 import { TeacherPagination } from "./teacher-pagination";
+import { NavTitle } from "@/components/ui/nav-title";
 
 const PAGE_SIZE = 10;
 
@@ -48,10 +49,7 @@ export default async function TeachersPage({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-white">Teachers</h1>
-        <p className="text-slate-400 mt-1">Manage and validate teacher accounts</p>
-      </div>
+      <NavTitle h1="Teachers" h2="Manage and validate teacher accounts" />
 
       <TeacherTable pendingTeachers={pendingTeachers} otherTeachers={otherTeachers} />
 
