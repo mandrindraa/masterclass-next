@@ -58,7 +58,7 @@ export function UserMenu({ userEmail, role }: UserMenuProps) {
           {theme === "dark" ? "Light mode" : "Dark mode"}
         </DropdownMenuItem>
 
-        <DropdownMenuItem render={<Link href="/dashboard/profile" />}>
+        <DropdownMenuItem render={<Link href="/profile" />}>
           <User className="h-4 w-4" />
           {t("profile")}
         </DropdownMenuItem>
