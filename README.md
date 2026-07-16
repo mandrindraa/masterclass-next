@@ -2,7 +2,29 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+First clone the repository:
+
+```bash
+git clone https://github.com/mandrindraa/masterclass-next.git
+cd masterclass-next
+```
+
+Then, install the dependencies:
+
+```bash
+npm install
+```
+
+Create the environment variables file:
+
+```bash
+cp .env.example .env
+```
+
+Edit the `.env` file to add your environment variables.
+
+
+Then, run the development server:
 
 ```bash
 npm run dev
