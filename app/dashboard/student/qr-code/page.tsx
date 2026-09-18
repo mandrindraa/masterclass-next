@@ -1,14 +1,54 @@
-import { Card } from "@/components/ui/card";
-import {NavTitle} from "@/components/ui/nav-title";
+import { auth } from "@/auth";
+import { NavTitle } from "@/components/ui/nav-title";
+import { Role } from "@/lib/generated/prisma/client";
+import { prisma } from "@/lib/prisma";
+import Image from "next/image";
+import { redirect } from "next/navigation";
+import QRCode from "qrcode";
 
-export default function QRCodePage() {
+export default async function QRCodePage() {
+  const session = await auth();
+  if (!session || session.user?.role !== Role.STUDENT || !session.user.id)
+    redirect("/dashboard");
+  const student = await prisma.student.findUnique({
+    where: { userId: session.user.id },
+    include: { class: true },
+  });
+  if (!student) redirect("/profile");
+  const qrDataUrl = await QRCode.toDataURL(student.studentCode, {
+    margin: 2,
+    width: 320,
+  });
   return (
     <div className="space-y-6">
       <NavTitle h1="My QR Code" h2="Your student identification badge" />
-
-      <Card className="bg-slate-900 border-slate-800 p-6 flex flex-col items-center justify-center min-h-96">
-        <p className="text-slate-400">Your QR code will be displayed here</p>
-      </Card>
+      <div className="flex flex-col items-center gap-5 rounded-lg border border-slate-800 bg-slate-900 p-8">
+        <div className="rounded-lg bg-white p-4">
+          <Image
+            src={qrDataUrl}
+            alt={`QR code for ${student.studentCode}`}
+            width={320}
+            height={320}
+            unoptimized
+          />
+        </div>
+        <div className="text-center">
+          <p className="text-xl font-semibold text-white">
+            {student.firstName} {student.lastName}
+          </p>
+          <p className="mt-1 font-mono text-emerald-400">
+            {student.studentCode}
+          </p>
+          <p className="mt-1 text-sm text-slate-400">{student.class.name}</p>
+        </div>
+        <a
+          href={qrDataUrl}
+          download={`${student.studentCode}-qr.png`}
+          className="rounded-md bg-emerald-500 px-4 py-2 text-sm font-medium text-slate-950 hover:bg-emerald-400"
+        >
+          Download QR code
+        </a>
+      </div>
     </div>
   );
 }
