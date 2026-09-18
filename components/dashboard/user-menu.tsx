@@ -45,8 +45,8 @@ export function UserMenu({ userEmail, role }: UserMenuProps) {
 
       <DropdownMenuContent>
         <DropdownMenuLabel>
-          <p className="truncate text-foreground font-medium">{userEmail}</p>
-          <p className="capitalize">{role?.toLowerCase()}</p>
+          <p className="truncate text-foreground font-medium right-0">{userEmail}</p>
+          <p className="capitalize right-0">{role?.toLowerCase()}</p>
         </DropdownMenuLabel>
 
         <DropdownMenuSeparator />

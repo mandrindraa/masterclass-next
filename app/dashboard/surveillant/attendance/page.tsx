@@ -1,22 +1,124 @@
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { auth } from "@/auth";
 import { NavTitle } from "@/components/ui/nav-title";
+import { Role } from "@/lib/generated/prisma/client";
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+import { AttendanceForm } from "./attendance-form";
 
-export default function AttendancePage() {
+export default async function AttendancePage() {
+  const session = await auth();
+  if (!session || session.user?.role !== Role.SURVEILLANT)
+    redirect("/dashboard");
+
+  const [academicYear, recentSessions] = await Promise.all([
+    prisma.academicYear.findFirst({
+      where: { isActive: true },
+      include: { periods: { orderBy: { number: "asc" } } },
+    }),
+    prisma.attendanceSession.findMany({
+      take: 8,
+      orderBy: [{ date: "desc" }, { createdAt: "desc" }],
+      include: {
+        class: { select: { name: true } },
+        period: { select: { label: true } },
+        _count: { select: { records: true } },
+      },
+    }),
+  ]);
+
+  const classes = academicYear
+    ? await prisma.class.findMany({
+        where: { academicYearId: academicYear.id },
+        orderBy: { name: "asc" },
+        select: { id: true, name: true, level: true },
+      })
+    : [];
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <NavTitle h1="Attendance" h2="Record and manage attendance sessions" />
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          New Session
-        </Button>
-      </div>
+    <div className="space-y-8">
+      <NavTitle
+        h1="Attendance"
+        h2="Start a QR attendance session for a class"
+      />
 
-      <Card className="bg-slate-900 border-slate-800 p-6">
-        <p className="text-slate-400">Attendance sessions will be displayed here</p>
-      </Card>
+      <AttendanceForm
+        academicYear={
+          academicYear
+            ? {
+                id: academicYear.id,
+                label: academicYear.label,
+                periods: academicYear.periods.map((period) => ({
+                  id: period.id,
+                  label: period.label,
+                })),
+              }
+            : null
+        }
+        classes={classes}
+      />
+
+      <section className="space-y-4">
+        <div>
+          <h2 className="text-lg font-semibold text-white">Recent sessions</h2>
+          <p className="text-sm text-slate-400">
+            Review the attendance sessions recorded by the school.
+          </p>
+        </div>
+        <div className="overflow-x-auto rounded-lg border border-slate-800 bg-slate-900">
+          <table className="w-full text-left text-sm">
+            <thead className="border-b border-slate-800 text-slate-400">
+              <tr>
+                <th className="px-4 py-3 font-medium">Date</th>
+                <th className="px-4 py-3 font-medium">Class</th>
+                <th className="px-4 py-3 font-medium">Period</th>
+                <th className="px-4 py-3 font-medium">Slot</th>
+                <th className="px-4 py-3 font-medium">Scanned</th>
+                <th className="px-4 py-3 font-medium">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-800">
+              {recentSessions.map((attendanceSession) => (
+                <tr key={attendanceSession.id} className="text-slate-200">
+                  <td className="px-4 py-3">
+                    {attendanceSession.date.toISOString().slice(0, 10)}
+                  </td>
+                  <td className="px-4 py-3">{attendanceSession.class.name}</td>
+                  <td className="px-4 py-3">
+                    {attendanceSession.period.label}
+                  </td>
+                  <td className="px-4 py-3 capitalize">
+                    {attendanceSession.slot.toLowerCase()}
+                  </td>
+                  <td className="px-4 py-3">
+                    {attendanceSession._count.records}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={
+                        attendanceSession.isClosed
+                          ? "text-emerald-400"
+                          : "text-amber-400"
+                      }
+                    >
+                      {attendanceSession.isClosed ? "Closed" : "Open"}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+              {recentSessions.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="px-4 py-8 text-center text-slate-500"
+                  >
+                    No attendance sessions have been recorded yet.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   );
 }
