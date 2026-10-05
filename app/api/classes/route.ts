@@ -4,8 +4,8 @@
  */
 
 import { auth } from "@/auth";
+import { Prisma, Role } from "@/lib/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
-import { Role } from "@/lib/generated/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -13,16 +13,13 @@ export async function GET(req: NextRequest) {
     const session = await auth();
 
     if (!session || session.user?.role !== Role.SURVEILLANT) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 403 }
-      );
+      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
     }
 
     const { searchParams } = new URL(req.url);
     const academicYearId = searchParams.get("academicYearId");
 
-    const whereClause: any = {};
+    const whereClause: Prisma.ClassWhereInput = {};
     if (academicYearId) whereClause.academicYearId = academicYearId;
 
     const classes = await prisma.class.findMany({
@@ -44,7 +41,7 @@ export async function GET(req: NextRequest) {
     console.error("Failed to fetch classes:", error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -54,19 +51,27 @@ export async function POST(req: NextRequest) {
     const session = await auth();
 
     if (!session || session.user?.role !== Role.SURVEILLANT) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 403 }
-      );
+      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
     }
 
     const body = await req.json();
-    const { name, level, academicYearId } = body;
+    const { name, level, academicYearId } = body as {
+      name?: string;
+      level?: string;
+      academicYearId?: string;
+    };
 
-    if (!name || !level || !academicYearId) {
+    if (
+      typeof name !== "string" ||
+      !name.trim() ||
+      typeof level !== "string" ||
+      !level.trim() ||
+      typeof academicYearId !== "string" ||
+      !academicYearId
+    ) {
       return NextResponse.json(
         { message: "Missing required fields" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -77,14 +82,14 @@ export async function POST(req: NextRequest) {
     if (!academicYear) {
       return NextResponse.json(
         { message: "Academic year not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     const newClass = await prisma.class.create({
       data: {
-        name,
-        level,
+        name: name.trim(),
+        level: level.trim(),
         academicYearId,
       },
       include: {
@@ -98,10 +103,25 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(newClass, { status: 201 });
   } catch (error) {
+    if (
+      error &&
+      typeof error === "object" &&
+      "code" in error &&
+      error.code === "P2002"
+    ) {
+      return NextResponse.json(
+        {
+          message:
+            "A class with this name already exists for this academic year",
+        },
+        { status: 409 },
+      );
+    }
+
     console.error("Failed to create class:", error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
