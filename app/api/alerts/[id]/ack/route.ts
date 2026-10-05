@@ -26,7 +26,10 @@ export async function PATCH(
         select: { id: true },
       });
       if (!existing) {
-        return NextResponse.json({ message: "Alert not found" }, { status: 404 });
+        return NextResponse.json(
+          { message: "Alert not found" },
+          { status: 404 },
+        );
       }
     }
 

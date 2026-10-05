@@ -65,7 +65,9 @@ export default function AlertsPage() {
     setPendingId(id);
     setError("");
     try {
-      const response = await fetch(`/api/alerts/${id}/ack`, { method: "PATCH" });
+      const response = await fetch(`/api/alerts/${id}/ack`, {
+        method: "PATCH",
+      });
       if (!response.ok) {
         const data = await response.json().catch(() => null);
         throw new Error(data?.message ?? "Unable to acknowledge this alert.");
@@ -96,7 +98,11 @@ export default function AlertsPage() {
         h2="Review absences recorded when attendance sessions close"
       />
 
-      <div className="flex flex-wrap gap-2" role="group" aria-label="Alert status">
+      <div
+        className="flex flex-wrap gap-2"
+        role="group"
+        aria-label="Alert status"
+      >
         <Button
           type="button"
           variant={showAcknowledged ? "outline" : "default"}
@@ -165,13 +171,14 @@ export default function AlertsPage() {
                       {alert.student.firstName} {alert.student.lastName}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {alert.student.studentCode} <span aria-hidden="true">·</span>{" "}
+                      {alert.student.studentCode}{" "}
+                      <span aria-hidden="true">·</span>{" "}
                       {alert.student.class.name}
                     </p>
                     <p className="text-sm text-muted-foreground">
                       Absent {date} <span aria-hidden="true">·</span>{" "}
-                      {session.slot.toLowerCase()} <span aria-hidden="true">·</span>{" "}
-                      {session.period.label}
+                      {session.slot.toLowerCase()}{" "}
+                      <span aria-hidden="true">·</span> {session.period.label}
                     </p>
                   </div>
                   {!alert.acknowledged && (
@@ -183,7 +190,10 @@ export default function AlertsPage() {
                       onClick={() => acknowledgeAlert(alert.id)}
                     >
                       {pendingId === alert.id ? (
-                        <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+                        <Loader2
+                          className="size-4 animate-spin"
+                          aria-hidden="true"
+                        />
                       ) : (
                         <Check className="size-4" aria-hidden="true" />
                       )}
