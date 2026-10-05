@@ -1,18 +1,18 @@
 import { auth } from "@/auth";
 import {
-    DashboardHeader,
-    DashboardSidebar,
+  DashboardHeader,
+  DashboardSidebar,
 } from "@/components/dashboard/header";
 import {
-    AlertCircle,
-    BarChart3,
-    BookOpen,
-    Briefcase,
-    FileText,
-    GraduationCap,
-    LayoutDashboard,
-    UserRoundCogIcon,
-    Users,
+  AlertCircle,
+  BarChart3,
+  BookOpen,
+  Briefcase,
+  FileText,
+  GraduationCap,
+  LayoutDashboard,
+  UserRoundCogIcon,
+  Users,
 } from "lucide-react";
 import { redirect } from "next/navigation";
 

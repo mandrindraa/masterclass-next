@@ -21,7 +21,11 @@ interface SidebarLink {
   icon: React.ReactNode;
 }
 
-export function DashboardHeader({ userEmail, role, links }: DashboardHeaderProps) {
+export function DashboardHeader({
+  userEmail,
+  role,
+  links,
+}: DashboardHeaderProps) {
   return (
     <header className="border-b border-border bg-card">
       <div className="flex min-h-16 items-center justify-between gap-2 px-3 py-3 sm:gap-4 sm:px-6">

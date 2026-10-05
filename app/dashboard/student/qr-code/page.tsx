@@ -40,7 +40,9 @@ export default async function QRCodePage() {
           <p className="mt-1 font-mono text-foreground">
             {student.studentCode}
           </p>
-          <p className="mt-1 text-sm text-muted-foreground">{student.class.name}</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {student.class.name}
+          </p>
         </div>
         <a
           href={qrDataUrl}

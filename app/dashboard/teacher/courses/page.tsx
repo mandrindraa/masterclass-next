@@ -1,7 +1,7 @@
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { NavTitle } from "@/components/ui/nav-title";
+import { Plus } from "lucide-react";
 
 export default function CoursesPage() {
   return (
@@ -15,7 +15,9 @@ export default function CoursesPage() {
       </div>
 
       <Card className="bg-card border-border p-6">
-        <p className="text-muted-foreground">Your courses will be displayed here</p>
+        <p className="text-muted-foreground">
+          Your courses will be displayed here
+        </p>
       </Card>
     </div>
   );

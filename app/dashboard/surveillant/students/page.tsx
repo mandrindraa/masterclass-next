@@ -1,29 +1,36 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle
 } from "@/components/ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Plus, Pencil, Trash2, AlertCircle, Loader2, FileDown, FileEdit} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { NavTitle } from "@/components/ui/nav-title";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import {
+    AlertCircle,
+    FileDown,
+    FileEdit,
+    Loader2,
+    Pencil,
+    Plus,
+    Trash2,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface Student {
   id: string;
@@ -203,7 +210,7 @@ export default function StudentsPage() {
   }
 
   function handleFormChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -212,7 +219,7 @@ export default function StudentsPage() {
   const filteredStudents = students.filter((student) =>
     `${student.firstName} ${student.lastName} ${student.studentCode}`
       .toLowerCase()
-      .includes(searchTerm.toLowerCase())
+      .includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -223,160 +230,159 @@ export default function StudentsPage() {
           <Button>
             <FileDown className="h-4 w-4" />
             Download template file
-        </Button>
-        <Button>
-          <FileEdit className="h-4 w-4" />
-          Import from file
-        </Button>
-        <Button
-          onClick={() => {
-            resetForm();
-            setShowCreateDialog(true);
-          }}
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Student
-        </Button>
+          </Button>
+          <Button>
+            <FileEdit className="h-4 w-4" />
+            Import from file
+          </Button>
+          <Button
+            onClick={() => {
+              resetForm();
+              setShowCreateDialog(true);
+            }}
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Student
+          </Button>
         </div>
       </div>
 
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
         <DialogContent className="bg-card border-border">
           <DialogHeader>
-            <DialogTitle className="text-foreground">Create New Student</DialogTitle>
+            <DialogTitle className="text-foreground">
+              Create New Student
+            </DialogTitle>
             <DialogDescription className="text-muted-foreground">
               Add a new student to the system
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleCreateStudent} className="space-y-4">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName" className="text-foreground">
-                    First Name *
-                  </Label>
-                  <Input
-                    id="firstName"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleFormChange}
-                    placeholder="Jean"
-                    className="bg-muted border-input text-foreground placeholder:text-muted-foreground"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName" className="text-foreground">
-                    Last Name *
-                  </Label>
-                  <Input
-                    id="lastName"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleFormChange}
-                    placeholder="Rakoto"
-                    className="bg-muted border-input text-foreground placeholder:text-muted-foreground"
-                  />
-                </div>
-              </div>
-
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-foreground">
-                  Email *
+                <Label htmlFor="firstName" className="text-foreground">
+                  First Name *
                 </Label>
                 <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
                   onChange={handleFormChange}
-                  placeholder="student@school.mg"
+                  placeholder="Jean"
                   className="bg-muted border-input text-foreground placeholder:text-muted-foreground"
                 />
               </div>
-
               <div className="space-y-2">
-                <Label htmlFor="birthDate" className="text-foreground">
-                  Birth Date
+                <Label htmlFor="lastName" className="text-foreground">
+                  Last Name *
                 </Label>
                 <Input
-                  id="birthDate"
-                  name="birthDate"
-                  type="date"
-                  value={formData.birthDate}
+                  id="lastName"
+                  name="lastName"
+                  value={formData.lastName}
                   onChange={handleFormChange}
-                  className="bg-muted border-input text-foreground"
+                  placeholder="Rakoto"
+                  className="bg-muted border-input text-foreground placeholder:text-muted-foreground"
                 />
               </div>
+            </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="classId" className="text-foreground">
-                  Class *
-                </Label>
-                <select
-                  id="classId"
-                  name="classId"
-                  value={formData.classId}
-                  onChange={handleFormChange}
-                  className="w-full px-3 py-2 bg-muted border border-input text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                >
-                  <option value="">Select a class</option>
-                  {classes.map((cls) => (
-                    <option key={cls.id} value={cls.id}>
-                      {cls.name} ({cls.level})
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-foreground">
+                Email *
+              </Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleFormChange}
+                placeholder="student@school.mg"
+                className="bg-muted border-input text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="academicYearId" className="text-foreground">
-                  Academic Year *
-                </Label>
-                <select
-                  id="academicYearId"
-                  name="academicYearId"
-                  value={formData.academicYearId}
-                  onChange={handleFormChange}
-                  className="w-full px-3 py-2 bg-muted border border-input text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                >
-                  <option value="">Select academic year</option>
-                  {academicYears.map((year) => (
-                    <option key={year.id} value={year.id}>
-                      {year.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="birthDate" className="text-foreground">
+                Birth Date
+              </Label>
+              <Input
+                id="birthDate"
+                name="birthDate"
+                type="date"
+                value={formData.birthDate}
+                onChange={handleFormChange}
+                className="bg-muted border-input text-foreground"
+              />
+            </div>
 
-              {error && (
-                <Alert
-                  variant="destructive"
-                  className="border-border bg-muted text-foreground"
-                >
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
+            <div className="space-y-2">
+              <Label htmlFor="classId" className="text-foreground">
+                Class *
+              </Label>
+              <select
+                id="classId"
+                name="classId"
+                value={formData.classId}
+                onChange={handleFormChange}
+                className="w-full px-3 py-2 bg-muted border border-input text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="">Select a class</option>
+                {classes.map((cls) => (
+                  <option key={cls.id} value={cls.id}>
+                    {cls.name} ({cls.level})
+                  </option>
+                ))}
+              </select>
+            </div>
 
-              <div className="flex gap-3 pt-4">
-                <Button
-                  type="submit"
-                  className="flex-1"
-                >
-                  Create Student
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="flex-1"
-                  onClick={() => setShowCreateDialog(false)}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
+            <div className="space-y-2">
+              <Label htmlFor="academicYearId" className="text-foreground">
+                Academic Year *
+              </Label>
+              <select
+                id="academicYearId"
+                name="academicYearId"
+                value={formData.academicYearId}
+                onChange={handleFormChange}
+                className="w-full px-3 py-2 bg-muted border border-input text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="">Select academic year</option>
+                {academicYears.map((year) => (
+                  <option key={year.id} value={year.id}>
+                    {year.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {error && (
+              <Alert
+                variant="destructive"
+                className="border-border bg-muted text-foreground"
+              >
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            <div className="flex gap-3 pt-4">
+              <Button type="submit" className="flex-1">
+                Create Student
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="flex-1"
+                onClick={() => setShowCreateDialog(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       {/* Custom delete confirmation modal, replaces window.confirm() */}
       <Dialog
@@ -387,7 +393,9 @@ export default function StudentsPage() {
       >
         <DialogContent className="bg-card border-border">
           <DialogHeader>
-            <DialogTitle className="text-foreground">Delete Student</DialogTitle>
+            <DialogTitle className="text-foreground">
+              Delete Student
+            </DialogTitle>
             <DialogDescription className="text-muted-foreground">
               {studentToDelete && (
                 <>
