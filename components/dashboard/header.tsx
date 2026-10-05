@@ -2,7 +2,7 @@
 
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { useLanguage } from "@/lib/i18n";
-import { ChevronLeft } from "lucide-react";
+import { PanelLeftClose } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -12,12 +12,19 @@ import { UserMenu } from "./user-menu";
 interface DashboardHeaderProps {
   userEmail?: string;
   role?: string;
+  links: SidebarLink[];
 }
 
-export function DashboardHeader({ userEmail, role }: DashboardHeaderProps) {
+interface SidebarLink {
+  label: string;
+  href: string;
+  icon: React.ReactNode;
+}
+
+export function DashboardHeader({ userEmail, role, links }: DashboardHeaderProps) {
   return (
     <header className="border-b border-border bg-card">
-      <div className="flex min-h-16 items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <div className="flex min-h-16 items-center justify-between gap-2 px-3 py-3 sm:gap-4 sm:px-6">
         <div className="flex items-center gap-3">
           <div className="inline-flex items-center justify-center size-10 rounded-lg bg-primary">
             <Icon />
@@ -25,19 +32,13 @@ export function DashboardHeader({ userEmail, role }: DashboardHeaderProps) {
           <span className="text-lg font-semibold">Masterclass</span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <LanguageSwitcher />
-          <UserMenu userEmail={userEmail} role={role} />
+          <UserMenu userEmail={userEmail} role={role} links={links} />
         </div>
       </div>
     </header>
   );
-}
-
-interface SidebarLink {
-  label: string;
-  href: string;
-  icon: React.ReactNode;
 }
 
 interface DashboardSidebarProps {
@@ -56,7 +57,7 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
 
   return (
     <aside
-      className={`flex h-[calc(100vh-64px)] flex-col border-r border-border bg-muted/40 transition-all duration-300 ease-in-out max-md:w-16 ${
+      className={`hidden h-full shrink-0 flex-col border-r border-border bg-muted/40 transition-all duration-300 ease-in-out md:flex ${
         collapsed ? "w-20" : "w-64"
       }`}
     >
@@ -69,7 +70,7 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
           aria-expanded={!collapsed}
           type="button"
         >
-          <ChevronLeft
+          <PanelLeftClose
             className={`h-5 w-5 transition-transform duration-300 ${
               collapsed ? "rotate-180" : ""
             }`}
@@ -88,6 +89,7 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
           {links.map((link) => (
             <Link
               key={link.href}
+              aria-current={isActive(link.href) ? "page" : undefined}
               href={link.href}
               className={`group relative flex items-center justify-center gap-3 rounded-lg px-2 py-3 transition-all duration-200 md:justify-start md:px-4 ${
                 isActive(link.href)

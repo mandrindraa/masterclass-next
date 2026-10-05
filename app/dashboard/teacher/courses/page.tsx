@@ -6,7 +6,7 @@ import { NavTitle } from "@/components/ui/nav-title";
 export default function CoursesPage() {
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
         <NavTitle h1="My Courses" h2="Manage courses and materials" />
         <Button>
           <Plus className="h-4 w-4 mr-2" />

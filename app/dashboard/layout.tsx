@@ -135,8 +135,12 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen flex-col bg-background">
-      <DashboardHeader userEmail={session.user?.email} role={role} />
+    <div className="flex h-dvh flex-col overflow-hidden bg-background">
+      <DashboardHeader
+        userEmail={session.user?.email}
+        role={role}
+        links={navLinks}
+      />
       <div className="flex flex-1 overflow-hidden">
         <DashboardSidebar links={navLinks} role={role} />
         <main className="min-w-0 flex-1 overflow-auto p-4 md:p-6 lg:p-8">

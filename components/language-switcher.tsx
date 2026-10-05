@@ -1,19 +1,25 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/i18n";
+import { Languages } from "lucide-react";
 
 export function LanguageSwitcher() {
   const { locale, setLocale } = useLanguage();
 
   return (
-    <select
-      value={locale}
-      onChange={(e) => setLocale(e.target.value as "en" | "fr")}
-      className="h-11 rounded-lg border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-      aria-label="Language"
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      onClick={() => setLocale(locale === "en" ? "fr" : "en")}
+      aria-label={
+        locale === "en" ? "Switch language to French" : "Passer en anglais"
+      }
+      className="gap-2 font-semibold tracking-wide"
     >
-      <option value="en">EN</option>
-      <option value="fr">FR</option>
-    </select>
+      <Languages aria-hidden="true" />
+      <span>{locale.toUpperCase()}</span>
+    </Button>
   );
 }

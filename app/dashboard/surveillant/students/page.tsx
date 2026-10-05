@@ -217,9 +217,9 @@ export default function StudentsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
         <NavTitle h1="Students" h2="Manage student enrollments" />
-        <div>
+        <div className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-2 sm:flex sm:flex-wrap sm:justify-end">
           <Button>
             <FileDown className="h-4 w-4" />
             Download template file
@@ -250,7 +250,7 @@ export default function StudentsPage() {
           </DialogHeader>
 
           <form onSubmit={handleCreateStudent} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="firstName" className="text-foreground">
                     First Name *
