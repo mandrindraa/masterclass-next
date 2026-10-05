@@ -33,22 +33,26 @@ export default async function AttendancePage() {
     <div className="space-y-8">
       <NavTitle h1="My Attendance" h2="Review your attendance history" />
       <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-lg border border-emerald-900/50 bg-emerald-950/30 p-5">
-          <p className="text-sm text-emerald-300">Present</p>
-          <p className="mt-1 text-3xl font-semibold text-white">{present}</p>
+        <div className="rounded-lg border border-border bg-muted p-5">
+          <p className="text-sm text-foreground">Present</p>
+          <p className="mt-1 text-3xl font-semibold text-foreground">
+            {present}
+          </p>
         </div>
-        <div className="rounded-lg border border-rose-900/50 bg-rose-950/30 p-5">
-          <p className="text-sm text-rose-300">Absent</p>
-          <p className="mt-1 text-3xl font-semibold text-white">{absent}</p>
+        <div className="rounded-lg border border-border bg-muted p-5">
+          <p className="text-sm text-foreground">Absent</p>
+          <p className="mt-1 text-3xl font-semibold text-foreground">
+            {absent}
+          </p>
         </div>
-        <div className="rounded-lg border border-amber-900/50 bg-amber-950/30 p-5">
-          <p className="text-sm text-amber-300">Late</p>
-          <p className="mt-1 text-3xl font-semibold text-white">{late}</p>
+        <div className="rounded-lg border border-border bg-muted p-5">
+          <p className="text-sm text-foreground">Late</p>
+          <p className="mt-1 text-3xl font-semibold text-foreground">{late}</p>
         </div>
       </div>
-      <div className="overflow-x-auto rounded-lg border border-slate-800 bg-slate-900">
+      <div className="overflow-x-auto rounded-lg border border-border bg-card">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-slate-800 text-slate-400">
+          <thead className="border-b border-border text-muted-foreground">
             <tr>
               <th className="px-4 py-3">Date</th>
               <th className="px-4 py-3">Class</th>
@@ -57,9 +61,9 @@ export default async function AttendancePage() {
               <th className="px-4 py-3">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800">
+          <tbody className="divide-y divide-border">
             {student.attendanceRecords.map((record) => (
-              <tr key={record.id} className="text-slate-200">
+              <tr key={record.id} className="text-foreground">
                 <td className="px-4 py-3">
                   {record.attendanceSession.date.toISOString().slice(0, 10)}
                 </td>
@@ -73,7 +77,7 @@ export default async function AttendancePage() {
                   {record.attendanceSession.slot.toLowerCase()}
                 </td>
                 <td
-                  className={`px-4 py-3 font-medium ${record.status === "PRESENT" ? "text-emerald-400" : record.status === "ABSENT" ? "text-rose-400" : "text-amber-400"}`}
+                  className={`px-4 py-3 font-medium ${record.status === "PRESENT" ? "text-foreground" : record.status === "ABSENT" ? "text-foreground" : "text-foreground"}`}
                 >
                   {record.status.toLowerCase()}
                 </td>
@@ -83,7 +87,7 @@ export default async function AttendancePage() {
               <tr>
                 <td
                   colSpan={5}
-                  className="px-4 py-8 text-center text-slate-500"
+                  className="px-4 py-8 text-center text-muted-foreground"
                 >
                   No attendance records yet.
                 </td>

@@ -87,19 +87,19 @@ export default async function ReportCardsPage() {
         {periodCards.map(({ period, complete, average, rank }) => (
           <section
             key={period.id}
-            className="rounded-lg border border-slate-800 bg-slate-900 p-5"
+            className="rounded-lg border border-border bg-card p-5"
           >
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h2 className="font-semibold text-white">{period.label}</h2>
-                <p className="mt-1 text-sm text-slate-400">
+                <h2 className="font-semibold text-foreground">{period.label}</h2>
+                <p className="mt-1 text-sm text-muted-foreground">
                   {complete
                     ? "All grades are entered for this period."
                     : "Your report card is not ready yet."}
                 </p>
               </div>
               <span
-                className={`rounded-full px-3 py-1 text-sm ${complete ? "bg-emerald-500/10 text-emerald-400" : "bg-amber-500/10 text-amber-400"}`}
+                className={`rounded-full px-3 py-1 text-sm ${complete ? "bg-primary/10 text-foreground" : "bg-muted text-foreground"}`}
               >
                 {complete ? "Ready" : "Incomplete"}
               </span>
@@ -107,20 +107,20 @@ export default async function ReportCardsPage() {
             {complete && (
               <div className="mt-5 grid gap-4 sm:grid-cols-3">
                 <div>
-                  <p className="text-sm text-slate-400">Period average</p>
-                  <p className="mt-1 text-2xl font-semibold text-white">
+                  <p className="text-sm text-muted-foreground">Period average</p>
+                  <p className="mt-1 text-2xl font-semibold text-foreground">
                     {average?.toFixed(2)}/20
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-slate-400">Class rank</p>
-                  <p className="mt-1 text-2xl font-semibold text-white">
+                  <p className="text-sm text-muted-foreground">Class rank</p>
+                  <p className="mt-1 text-2xl font-semibold text-foreground">
                     {rank ? `#${rank}` : "--"}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-slate-400">Absences</p>
-                  <p className="mt-1 text-2xl font-semibold text-white">
+                  <p className="text-sm text-muted-foreground">Absences</p>
+                  <p className="mt-1 text-2xl font-semibold text-foreground">
                     {student.attendanceRecords.length}
                   </p>
                 </div>

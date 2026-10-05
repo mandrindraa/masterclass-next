@@ -37,23 +37,23 @@ export default async function CoursesPage() {
         {courses.map((course) => (
           <article
             key={course.id}
-            className="rounded-lg border border-slate-800 bg-slate-900 p-5"
+            className="rounded-lg border border-border bg-card p-5"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h2 className="font-semibold text-white">{course.title}</h2>
-                <p className="mt-1 text-sm text-emerald-400">
+                <h2 className="font-semibold text-foreground">{course.title}</h2>
+                <p className="mt-1 text-sm text-foreground">
                   {course.teacherClassSubject.subject.name} ·{" "}
                   {course.period.label}
                 </p>
               </div>
-              <span className="text-xs text-slate-500">
+              <span className="text-xs text-muted-foreground">
                 {course.materials.length} file
                 {course.materials.length === 1 ? "" : "s"}
               </span>
             </div>
             {course.description && (
-              <p className="mt-4 text-sm text-slate-400">
+              <p className="mt-4 text-sm text-muted-foreground">
                 {course.description}
               </p>
             )}
@@ -63,19 +63,19 @@ export default async function CoursesPage() {
                   key={material.id}
                   href={material.filePath}
                   download
-                  className="block rounded-md bg-slate-800 px-3 py-2 text-sm text-slate-200 hover:bg-slate-700"
+                  className="block rounded-md bg-muted px-3 py-2 text-sm text-foreground hover:bg-accent"
                 >
                   {material.fileName}
                 </a>
               ))}
               {course.materials.length === 0 && (
-                <p className="text-sm text-slate-500">No materials attached.</p>
+                <p className="text-sm text-muted-foreground">No materials attached.</p>
               )}
             </div>
           </article>
         ))}
         {courses.length === 0 && (
-          <div className="rounded-lg border border-slate-800 bg-slate-900 p-8 text-center text-slate-400 lg:col-span-2">
+          <div className="rounded-lg border border-border bg-card p-8 text-center text-muted-foreground lg:col-span-2">
             No courses are available for your class yet.
           </div>
         )}

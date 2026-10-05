@@ -125,19 +125,19 @@ export function ScannerView({
 
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-      <Card className="border-slate-800 bg-slate-900 p-6">
+      <Card className="border-border bg-card p-6">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <h2 className="font-semibold text-white">QR scanner</h2>
-            <p className="text-sm text-slate-400">
+            <h2 className="font-semibold text-foreground">QR scanner</h2>
+            <p className="text-sm text-muted-foreground">
               Scan each student card to mark them present.
             </p>
           </div>
-          <Camera className="h-5 w-5 text-emerald-400" />
+          <Camera className="h-5 w-5 text-foreground" />
         </div>
         <div
           id="attendance-reader"
-          className="min-h-64 overflow-hidden rounded-lg border border-dashed border-slate-700 bg-slate-950"
+          className="min-h-64 overflow-hidden rounded-lg border border-dashed border-input bg-background"
         />
         <form
           onSubmit={(event) => {
@@ -151,43 +151,43 @@ export function ScannerView({
             onChange={(event) => setStudentCode(event.target.value)}
             placeholder="Enter student code"
             disabled={isClosed}
-            className="h-10 min-w-0 flex-1 rounded-md border border-slate-700 bg-slate-800 px-3 text-sm text-white placeholder:text-slate-500"
+            className="h-10 min-w-0 flex-1 rounded-md border border-input bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground"
           />
           <Button type="submit" disabled={isClosed || !studentCode.trim()}>
             <ScanLine className="mr-2 h-4 w-4" />
             Record
           </Button>
         </form>
-        <p role="status" className="mt-3 min-h-5 text-sm text-slate-400">
+        <p role="status" className="mt-3 min-h-5 text-sm text-muted-foreground">
           {message || (isScanning ? "Camera is ready." : "Starting camera...")}
         </p>
       </Card>
 
-      <Card className="border-slate-800 bg-slate-900 p-6">
+      <Card className="border-border bg-card p-6">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <h2 className="font-semibold text-white">Scanned students</h2>
-            <p className="text-sm text-slate-400">{records.length} recorded</p>
+            <h2 className="font-semibold text-foreground">Scanned students</h2>
+            <p className="text-sm text-muted-foreground">{records.length} recorded</p>
           </div>
-          <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+          <CheckCircle2 className="h-5 w-5 text-foreground" />
         </div>
         <div className="max-h-96 space-y-2 overflow-y-auto">
           {records.map((record) => (
             <div
               key={record.id}
-              className="flex items-center justify-between rounded-md bg-slate-800/60 px-3 py-2"
+              className="flex items-center justify-between rounded-md bg-muted px-3 py-2"
             >
               <div>
-                <p className="text-sm text-white">
+                <p className="text-sm text-foreground">
                   {record.firstName} {record.lastName}
                 </p>
-                <p className="text-xs text-slate-400">{record.studentCode}</p>
+                <p className="text-xs text-muted-foreground">{record.studentCode}</p>
               </div>
-              <span className="text-xs text-emerald-400">Present</span>
+              <span className="text-xs text-foreground">Present</span>
             </div>
           ))}
           {records.length === 0 && (
-            <p className="py-8 text-center text-sm text-slate-500">
+            <p className="py-8 text-center text-sm text-muted-foreground">
               No students scanned yet.
             </p>
           )}

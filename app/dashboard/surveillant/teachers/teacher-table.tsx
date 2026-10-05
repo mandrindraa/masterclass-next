@@ -31,14 +31,14 @@ export function TeacherTable({
   const renderRow = (t: TeacherRow) => (
     <TableRow
       key={t.id}
-      className="border-slate-800 hover:bg-slate-800/50 cursor-pointer"
+      className="border-border hover:bg-muted cursor-pointer"
       onClick={() => router.push(`/dashboard/surveillant/teachers/${t.id}`)}
     >
-      <TableCell className="text-white font-medium">
+      <TableCell className="text-foreground font-medium">
         {t.firstName} {t.lastName}
       </TableCell>
-      <TableCell className="text-slate-400">{t.user.email}</TableCell>
-      <TableCell className="text-slate-400">{t.user.status}</TableCell>
+      <TableCell className="text-muted-foreground">{t.user.email}</TableCell>
+      <TableCell className="text-muted-foreground">{t.user.status}</TableCell>
       <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
         {t.user.status === "PENDING" && (
           <div className="flex justify-end gap-2">
@@ -66,25 +66,25 @@ export function TeacherTable({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-semibold text-slate-400 mb-2">
+        <h2 className="text-lg font-semibold text-muted-foreground mb-2">
           Waiting for validation ({pendingTeachers.length})
         </h2>
-        <Card className="bg-slate-900 border-slate-800 overflow-hidden">
+        <Card className="bg-card border-border overflow-hidden">
           <Table>
             <TableHeader>
-              <TableRow className="border-slate-800">
-                <TableHead className="text-slate-300">Name</TableHead>
-                <TableHead className="text-slate-300">Email</TableHead>
-                <TableHead className="text-slate-300">Status</TableHead>
-                <TableHead className="text-slate-300 text-right">Actions</TableHead>
+              <TableRow className="border-border">
+                <TableHead className="text-foreground">Name</TableHead>
+                <TableHead className="text-foreground">Email</TableHead>
+                <TableHead className="text-foreground">Status</TableHead>
+                <TableHead className="text-foreground text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {pendingTeachers.length > 0 ? (
                 pendingTeachers.map(renderRow)
               ) : (
-                <TableRow className="border-slate-800">
-                  <TableCell colSpan={4} className="text-center text-slate-400 py-6">
+                <TableRow className="border-border">
+                  <TableCell colSpan={4} className="text-center text-muted-foreground py-6">
                     No teacher pending for validation
                   </TableCell>
                 </TableRow>
@@ -95,15 +95,15 @@ export function TeacherTable({
       </div>
 
       <div>
-        <h2 className="text-lg font-semibold text-white mb-2">All teachers</h2>
-        <Card className="bg-slate-900 border-slate-800 overflow-hidden">
+        <h2 className="text-lg font-semibold text-foreground mb-2">All teachers</h2>
+        <Card className="bg-card border-border overflow-hidden">
           <Table>
             <TableHeader>
-              <TableRow className="border-slate-800">
-                <TableHead className="text-slate-300">Name</TableHead>
-                <TableHead className="text-slate-300">Email</TableHead>
-                <TableHead className="text-slate-300">Status</TableHead>
-                <TableHead className="text-slate-300 text-right" />
+              <TableRow className="border-border">
+                <TableHead className="text-foreground">Name</TableHead>
+                <TableHead className="text-foreground">Email</TableHead>
+                <TableHead className="text-foreground">Status</TableHead>
+                <TableHead className="text-foreground text-right" />
               </TableRow>
             </TableHeader>
             <TableBody>{otherTeachers.map(renderRow)}</TableBody>

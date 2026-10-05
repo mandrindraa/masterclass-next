@@ -1,26 +1,26 @@
 "use client";
 
-import { signOut } from "next-auth/react";
-import Link from "next/link";
-import { useTheme } from "next-themes";
-import { useSyncExternalStore } from "react";
-import { Sun, Moon, User, LogOut } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuLabel,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useLanguage } from "@/lib/i18n";
+import { LogOut, Moon, Sun, User } from "lucide-react";
+import { signOut } from "next-auth/react";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import { useSyncExternalStore } from "react";
 
 function useMounted() {
   return useSyncExternalStore(
     () => () => {},
     () => true,
-    () => false
+    () => false,
   );
 }
 
@@ -37,24 +37,32 @@ export function UserMenu({ userEmail, role }: UserMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        title={userEmail}
+        className="flex size-11 items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        aria-label={`Open account menu for ${userEmail ?? "current user"}`}
       >
         <Avatar email={userEmail} />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent>
         <DropdownMenuLabel>
-          <p className="truncate text-foreground font-medium right-0">{userEmail}</p>
+          <p className="truncate text-foreground font-medium right-0">
+            {userEmail}
+          </p>
           <p className="capitalize right-0">{role?.toLowerCase()}</p>
         </DropdownMenuLabel>
 
         <DropdownMenuSeparator />
 
         <DropdownMenuItem
-          onClick={() => mounted && setTheme(theme === "dark" ? "light" : "dark")}
+          onClick={() =>
+            mounted && setTheme(theme === "dark" ? "light" : "dark")
+          }
         >
-          {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          {theme === "dark" ? (
+            <Sun className="h-4 w-4" />
+          ) : (
+            <Moon className="h-4 w-4" />
+          )}
           {theme === "dark" ? "Light mode" : "Dark mode"}
         </DropdownMenuItem>
 

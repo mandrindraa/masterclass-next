@@ -14,8 +14,8 @@ export default function CoursesPage() {
         </Button>
       </div>
 
-      <Card className="bg-slate-900 border-slate-800 p-6">
-        <p className="text-slate-400">Your courses will be displayed here</p>
+      <Card className="bg-card border-border p-6">
+        <p className="text-muted-foreground">Your courses will be displayed here</p>
       </Card>
     </div>
   );

@@ -51,14 +51,14 @@ export function AttendanceForm({ academicYear, classes }: AttendanceFormProps) {
   }
 
   return (
-    <Card className="border-slate-800 bg-slate-900 p-6">
+    <Card className="border-border bg-card p-6">
       <div className="mb-5 flex items-start gap-3">
-        <div className="rounded-md bg-emerald-500/10 p-2 text-emerald-400">
+        <div className="rounded-md bg-primary/10 p-2 text-foreground">
           <CalendarDays className="h-5 w-5" />
         </div>
         <div>
-          <h2 className="font-semibold text-white">Start a session</h2>
-          <p className="text-sm text-slate-400">
+          <h2 className="font-semibold text-foreground">Start a session</h2>
+          <p className="text-sm text-muted-foreground">
             {academicYear
               ? `Active academic year: ${academicYear.label}`
               : "Create an active academic year first."}
@@ -66,17 +66,17 @@ export function AttendanceForm({ academicYear, classes }: AttendanceFormProps) {
         </div>
       </div>
       {!academicYear || classes.length === 0 ? (
-        <p className="text-sm text-amber-400">
+        <p className="text-sm text-foreground">
           An active academic year and at least one class are required.
         </p>
       ) : (
         <form onSubmit={startSession} className="grid gap-4 md:grid-cols-4">
-          <label className="space-y-2 text-sm text-slate-300">
+          <label className="space-y-2 text-sm text-foreground">
             Class
             <select
               value={classId}
               onChange={(event) => setClassId(event.target.value)}
-              className="h-10 w-full rounded-md border border-slate-700 bg-slate-800 px-3 text-white"
+              className="h-10 w-full rounded-md border border-input bg-muted px-3 text-foreground"
             >
               {classes.map((schoolClass) => (
                 <option key={schoolClass.id} value={schoolClass.id}>
@@ -85,12 +85,12 @@ export function AttendanceForm({ academicYear, classes }: AttendanceFormProps) {
               ))}
             </select>
           </label>
-          <label className="space-y-2 text-sm text-slate-300">
+          <label className="space-y-2 text-sm text-foreground">
             Period
             <select
               value={periodId}
               onChange={(event) => setPeriodId(event.target.value)}
-              className="h-10 w-full rounded-md border border-slate-700 bg-slate-800 px-3 text-white"
+              className="h-10 w-full rounded-md border border-input bg-muted px-3 text-foreground"
             >
               {academicYear.periods.map((period) => (
                 <option key={period.id} value={period.id}>
@@ -99,29 +99,29 @@ export function AttendanceForm({ academicYear, classes }: AttendanceFormProps) {
               ))}
             </select>
           </label>
-          <label className="space-y-2 text-sm text-slate-300">
+          <label className="space-y-2 text-sm text-foreground">
             Date
             <input
               type="date"
               value={date}
               onChange={(event) => setDate(event.target.value)}
-              className="h-10 w-full rounded-md border border-slate-700 bg-slate-800 px-3 text-white"
+              className="h-10 w-full rounded-md border border-input bg-muted px-3 text-foreground"
               required
             />
           </label>
-          <label className="space-y-2 text-sm text-slate-300">
+          <label className="space-y-2 text-sm text-foreground">
             Slot
             <select
               value={slot}
               onChange={(event) => setSlot(event.target.value)}
-              className="h-10 w-full rounded-md border border-slate-700 bg-slate-800 px-3 text-white"
+              className="h-10 w-full rounded-md border border-input bg-muted px-3 text-foreground"
             >
               <option value="MORNING">Morning</option>
               <option value="AFTERNOON">Afternoon</option>
             </select>
           </label>
           <div className="flex items-center gap-4 md:col-span-4">
-            <p role="alert" className="text-sm text-rose-400">
+            <p role="alert" className="text-sm text-foreground">
               {error}
             </p>
             <Button

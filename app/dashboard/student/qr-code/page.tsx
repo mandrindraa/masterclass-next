@@ -22,8 +22,8 @@ export default async function QRCodePage() {
   return (
     <div className="space-y-6">
       <NavTitle h1="My QR Code" h2="Your student identification badge" />
-      <div className="flex flex-col items-center gap-5 rounded-lg border border-slate-800 bg-slate-900 p-8">
-        <div className="rounded-lg bg-white p-4">
+      <div className="flex flex-col items-center gap-5 rounded-lg border border-border bg-card p-8">
+        <div className="rounded-lg bg-background p-4">
           <Image
             src={qrDataUrl}
             alt={`QR code for ${student.studentCode}`}
@@ -33,18 +33,18 @@ export default async function QRCodePage() {
           />
         </div>
         <div className="text-center">
-          <p className="text-xl font-semibold text-white">
+          <p className="text-xl font-semibold text-foreground">
             {student.firstName} {student.lastName}
           </p>
-          <p className="mt-1 font-mono text-emerald-400">
+          <p className="mt-1 font-mono text-foreground">
             {student.studentCode}
           </p>
-          <p className="mt-1 text-sm text-slate-400">{student.class.name}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{student.class.name}</p>
         </div>
         <a
           href={qrDataUrl}
           download={`${student.studentCode}-qr.png`}
-          className="rounded-md bg-emerald-500 px-4 py-2 text-sm font-medium text-slate-950 hover:bg-emerald-400"
+          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/80"
         >
           Download QR code
         </a>

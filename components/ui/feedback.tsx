@@ -31,8 +31,8 @@ export default function FeedbackModal({
   }
 
   return (
-    <div className="fixed w-100 inset-0 z-99999 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
-      <div className="relative w-full max-w-md rounded-3xl bg-white p-8 shadow-2xl">
+    <div className="fixed w-100 inset-0 z-99999 flex items-center justify-center bg-background/40 p-4 backdrop-blur-sm">
+      <div className="relative w-full max-w-md rounded-3xl bg-background p-8 shadow-2xl">
         {/* Close */}
         <button
           onClick={onCancel}

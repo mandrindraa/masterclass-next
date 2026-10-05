@@ -33,7 +33,7 @@ export default async function GradesPage() {
     <div className="space-y-8">
       <NavTitle h1="My Grades" h2="View your academic performance" />
       {periods.length === 0 ? (
-        <div className="rounded-lg border border-slate-800 bg-slate-900 p-8 text-center text-slate-400">
+        <div className="rounded-lg border border-border bg-card p-8 text-center text-muted-foreground">
           Your grades will appear here once they are published.
         </div>
       ) : (
@@ -57,17 +57,17 @@ export default async function GradesPage() {
           return (
             <section key={period.id} className="space-y-3">
               <div className="flex items-baseline justify-between">
-                <h2 className="text-lg font-semibold text-white">
+                <h2 className="text-lg font-semibold text-foreground">
                   {period.label}
                 </h2>
-                <span className="text-sm text-emerald-400">
+                <span className="text-sm text-foreground">
                   Average:{" "}
                   {average === null ? "--" : `${average.toFixed(2)}/20`}
                 </span>
               </div>
-              <div className="overflow-x-auto rounded-lg border border-slate-800 bg-slate-900">
+              <div className="overflow-x-auto rounded-lg border border-border bg-card">
                 <table className="w-full text-left text-sm">
-                  <thead className="border-b border-slate-800 text-slate-400">
+                  <thead className="border-b border-border text-muted-foreground">
                     <tr>
                       <th className="px-4 py-3">Subject</th>
                       <th className="px-4 py-3">Coefficient</th>
@@ -76,9 +76,9 @@ export default async function GradesPage() {
                       <th className="px-4 py-3">Comment</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800">
+                  <tbody className="divide-y divide-border">
                     {grades.map((grade) => (
-                      <tr key={grade.id} className="text-slate-200">
+                      <tr key={grade.id} className="text-foreground">
                         <td className="px-4 py-3">
                           {grade.teacherClassSubject.subject.name}
                         </td>
@@ -94,7 +94,7 @@ export default async function GradesPage() {
                             grade.teacherClassSubject.subject.coefficient
                           ).toFixed(2)}
                         </td>
-                        <td className="px-4 py-3 text-slate-400">
+                        <td className="px-4 py-3 text-muted-foreground">
                           {grade.comment || "-"}
                         </td>
                       </tr>

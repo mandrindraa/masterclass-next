@@ -50,21 +50,21 @@ export default async function StudentDashboard() {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-slate-900 border-slate-800 p-6">
-          <p className="text-slate-400 text-sm mb-2">General Average</p>
-          <p className="text-3xl font-bold text-white">
+        <Card variant="contrast" className="p-6">
+          <p className="text-primary-foreground/70 text-sm mb-2">General Average</p>
+          <p className="text-3xl font-bold text-primary-foreground">
             {average === null ? "--" : `${average.toFixed(2)}/20`}
           </p>
         </Card>
-        <Card className="bg-slate-900 border-slate-800 p-6">
-          <p className="text-slate-400 text-sm mb-2">Current Period</p>
-          <p className="text-3xl font-bold text-white">
+        <Card variant="contrast" className="p-6">
+          <p className="text-primary-foreground/70 text-sm mb-2">Current Period</p>
+          <p className="text-3xl font-bold text-primary-foreground">
             {student.academicYear.periods[0]?.label ?? "--"}
           </p>
         </Card>
-        <Card className="bg-slate-900 border-slate-800 p-6">
-          <p className="text-slate-400 text-sm mb-2">Attendance</p>
-          <p className="text-3xl font-bold text-white">
+        <Card variant="contrast" className="p-6">
+          <p className="text-primary-foreground/70 text-sm mb-2">Attendance</p>
+          <p className="text-3xl font-bold text-primary-foreground">
             {attendanceRate === null ? "--" : `${attendanceRate}%`}
           </p>
         </Card>
@@ -72,34 +72,34 @@ export default async function StudentDashboard() {
 
       <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-white">Grade summary</h2>
+          <h2 className="text-lg font-semibold text-foreground">Grade summary</h2>
           <Link
             href="/dashboard/student/grades"
-            className="text-sm text-emerald-400 hover:text-emerald-300"
+            className="text-sm text-foreground hover:text-foreground"
           >
             View all grades
           </Link>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {student.grades.slice(0, 6).map((grade) => (
-            <Card key={grade.id} className="border-slate-800 bg-slate-900 p-5">
+            <Card key={grade.id} className="border-border bg-card p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="font-medium text-white">
+                  <p className="font-medium text-foreground">
                     {grade.teacherClassSubject.subject.name}
                   </p>
-                  <p className="text-sm text-slate-400">
+                  <p className="text-sm text-muted-foreground">
                     Coefficient {grade.teacherClassSubject.subject.coefficient}
                   </p>
                 </div>
-                <p className="font-semibold text-emerald-400">
+                <p className="font-semibold text-foreground">
                   {Number(grade.score).toFixed(2)}/20
                 </p>
               </div>
             </Card>
           ))}
           {student.grades.length === 0 && (
-            <Card className="border-slate-800 bg-slate-900 p-5 text-sm text-slate-400">
+            <Card className="border-border bg-card p-5 text-sm text-muted-foreground">
               Grades will appear here once your teachers publish them.
             </Card>
           )}

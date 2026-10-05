@@ -1,13 +1,19 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function RegisterPage() {
   const [form, setForm] = useState({
@@ -73,9 +79,7 @@ export default function RegisterPage() {
           <div className="inline-flex items-center justify-center size-16 rounded-full bg-accent mb-4">
             <CheckCircle2 className="size-8 text-accent-foreground" />
           </div>
-          <h2 className="text-2xl font-bold mb-2">
-            Registration Successful!
-          </h2>
+          <h2 className="text-2xl font-bold mb-2">Registration Successful!</h2>
           <p className="text-muted-foreground mb-6">
             Your account is pending validation by the school surveillant. You
             will be notified once it is approved.
@@ -113,9 +117,7 @@ export default function RegisterPage() {
               />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold">
-            Teacher Registration
-          </h1>
+          <h1 className="text-2xl font-bold">Teacher Registration</h1>
           <p className="text-muted-foreground text-sm mt-1">
             Create your account to get started
           </p>
@@ -124,7 +126,9 @@ export default function RegisterPage() {
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle>Register</CardTitle>
-            <CardDescription>Create your account to access the system</CardDescription>
+            <CardDescription>
+              Create your account to access the system
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form
@@ -132,11 +136,9 @@ export default function RegisterPage() {
               className="space-y-4"
               id="register-form"
             >
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="firstName">
-                    First name
-                  </Label>
+                  <Label htmlFor="firstName">First name</Label>
                   <Input
                     id="firstName"
                     name="firstName"
@@ -148,9 +150,7 @@ export default function RegisterPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="lastName">
-                    Last name
-                  </Label>
+                  <Label htmlFor="lastName">Last name</Label>
                   <Input
                     id="lastName"
                     name="lastName"
@@ -164,9 +164,7 @@ export default function RegisterPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="reg-email">
-                  Email address
-                </Label>
+                <Label htmlFor="reg-email">Email address</Label>
                 <Input
                   id="reg-email"
                   name="email"
@@ -182,7 +180,9 @@ export default function RegisterPage() {
               <div className="space-y-2">
                 <Label htmlFor="phone">
                   Phone{" "}
-                  <span className="text-muted-foreground font-normal">(optional)</span>
+                  <span className="text-muted-foreground font-normal">
+                    (optional)
+                  </span>
                 </Label>
                 <Input
                   id="phone"
@@ -195,9 +195,7 @@ export default function RegisterPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="reg-password">
-                  Password
-                </Label>
+                <Label htmlFor="reg-password">Password</Label>
                 <Input
                   id="reg-password"
                   name="password"
@@ -211,9 +209,7 @@ export default function RegisterPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">
-                  Confirm password
-                </Label>
+                <Label htmlFor="confirmPassword">Confirm password</Label>
                 <Input
                   id="confirmPassword"
                   name="confirmPassword"
@@ -239,7 +235,12 @@ export default function RegisterPage() {
                 disabled={loading}
                 className="w-full"
               >
-                {loading && <Loader2 className="h-4 w-4 animate-spin" data-icon="inline-start" />}
+                {loading && (
+                  <Loader2
+                    className="h-4 w-4 animate-spin"
+                    data-icon="inline-start"
+                  />
+                )}
                 {loading ? "Creating account…" : "Create account"}
               </Button>
             </form>

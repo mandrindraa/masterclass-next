@@ -6,8 +6,8 @@ export default function GradesPage() {
     <div className="space-y-6">
       <NavTitle h1="Grades" h2="Enter and manage student grades" />
 
-      <Card className="bg-slate-900 border-slate-800 p-6">
-        <p className="text-slate-400">Grade entry system will be displayed here</p>
+      <Card className="bg-card border-border p-6">
+        <p className="text-muted-foreground">Grade entry system will be displayed here</p>
       </Card>
     </div>
   );

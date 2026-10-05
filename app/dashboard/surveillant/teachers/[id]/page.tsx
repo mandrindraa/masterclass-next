@@ -31,15 +31,15 @@ export default async function TeacherDetailPage({
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-white">
+      <h1 className="text-3xl font-bold text-foreground">
         {teacher.firstName} {teacher.lastName}
       </h1>
-      <Card className="bg-slate-900 border-slate-800 p-6 space-y-2">
-        <p className="text-slate-400">Email: {teacher.user.email}</p>
-        <p className="text-slate-400">Phone: {teacher.phone ?? "—"}</p>
-        <p className="text-slate-400">Status: {teacher.user.status}</p>
+      <Card className="bg-card border-border p-6 space-y-2">
+        <p className="text-muted-foreground">Email: {teacher.user.email}</p>
+        <p className="text-muted-foreground">Phone: {teacher.phone ?? "—"}</p>
+        <p className="text-muted-foreground">Status: {teacher.user.status}</p>
         {teacher.validator && (
-          <p className="text-slate-400">Validated by: {teacher.validator.email}</p>
+          <p className="text-muted-foreground">Validated by: {teacher.validator.email}</p>
         )}
       </Card>
     </div>

@@ -1,13 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { UserMenu } from "./user-menu";
-import { ChevronLeft } from "lucide-react";
-import { useState } from "react";
-import { usePathname } from "next/navigation";
-import Icon from "../ui/icon";
 import { useLanguage } from "@/lib/i18n";
+import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import Icon from "../ui/icon";
+import { UserMenu } from "./user-menu";
 
 interface DashboardHeaderProps {
   userEmail?: string;
@@ -17,10 +17,10 @@ interface DashboardHeaderProps {
 export function DashboardHeader({ userEmail, role }: DashboardHeaderProps) {
   return (
     <header className="border-b border-border bg-card">
-      <div className="flex items-center justify-between px-6 py-4">
+      <div className="flex min-h-16 items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <div className="flex items-center gap-3">
           <div className="inline-flex items-center justify-center size-10 rounded-lg bg-primary">
-            <Icon/>
+            <Icon />
           </div>
           <span className="text-lg font-semibold">Masterclass</span>
         </div>
@@ -56,16 +56,18 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
 
   return (
     <aside
-      className={`border-r border-border bg-muted/40 transition-all duration-300 ease-in-out flex flex-col h-[calc(100vh-64px)] ${
+      className={`flex h-[calc(100vh-64px)] flex-col border-r border-border bg-muted/40 transition-all duration-300 ease-in-out max-md:w-16 ${
         collapsed ? "w-20" : "w-64"
       }`}
     >
       {/* Collapse Button */}
-      <div className="flex items-center justify-end p-4 border-b border-border">
+      <div className="flex items-center justify-end border-b border-border p-2 md:p-4">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="p-2 hover:bg-card rounded-lg transition-colors"
-          title={collapsed ? "Expand" : "Collapse"}
+          className="flex size-11 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-card hover:text-foreground"
+          aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
+          aria-expanded={!collapsed}
+          type="button"
         >
           <ChevronLeft
             className={`h-5 w-5 transition-transform duration-300 ${
@@ -76,9 +78,9 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
       </div>
 
       {/* Navigation */}
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-2 md:p-4">
         {!collapsed && (
-          <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+          <h2 className="mb-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground max-md:hidden">
             {t("navigation")}
           </h2>
         )}
@@ -87,7 +89,7 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
             <Link
               key={link.href}
               href={link.href}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 relative group ${
+              className={`group relative flex items-center justify-center gap-3 rounded-lg px-2 py-3 transition-all duration-200 md:justify-start md:px-4 ${
                 isActive(link.href)
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-card hover:text-foreground"
@@ -96,7 +98,7 @@ export function DashboardSidebar({ links }: DashboardSidebarProps) {
               {link.icon}
               <span
                 className={`text-sm font-medium transition-opacity duration-200 ${
-                  collapsed ? "opacity-0 hidden" : "opacity-100"
+                  collapsed ? "hidden opacity-0" : "opacity-100 max-md:hidden"
                 }`}
               >
                 {link.label}

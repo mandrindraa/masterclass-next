@@ -59,14 +59,14 @@ export default async function AttendancePage() {
 
       <section className="space-y-4">
         <div>
-          <h2 className="text-lg font-semibold text-white">Recent sessions</h2>
-          <p className="text-sm text-slate-400">
+          <h2 className="text-lg font-semibold text-foreground">Recent sessions</h2>
+          <p className="text-sm text-muted-foreground">
             Review the attendance sessions recorded by the school.
           </p>
         </div>
-        <div className="overflow-x-auto rounded-lg border border-slate-800 bg-slate-900">
+        <div className="overflow-x-auto rounded-lg border border-border bg-card">
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-slate-800 text-slate-400">
+            <thead className="border-b border-border text-muted-foreground">
               <tr>
                 <th className="px-4 py-3 font-medium">Date</th>
                 <th className="px-4 py-3 font-medium">Class</th>
@@ -76,9 +76,9 @@ export default async function AttendancePage() {
                 <th className="px-4 py-3 font-medium">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800">
+            <tbody className="divide-y divide-border">
               {recentSessions.map((attendanceSession) => (
-                <tr key={attendanceSession.id} className="text-slate-200">
+                <tr key={attendanceSession.id} className="text-foreground">
                   <td className="px-4 py-3">
                     {attendanceSession.date.toISOString().slice(0, 10)}
                   </td>
@@ -96,8 +96,8 @@ export default async function AttendancePage() {
                     <span
                       className={
                         attendanceSession.isClosed
-                          ? "text-emerald-400"
-                          : "text-amber-400"
+                          ? "text-foreground"
+                          : "text-foreground"
                       }
                     >
                       {attendanceSession.isClosed ? "Closed" : "Open"}
@@ -109,7 +109,7 @@ export default async function AttendancePage() {
                 <tr>
                   <td
                     colSpan={6}
-                    className="px-4 py-8 text-center text-slate-500"
+                    className="px-4 py-8 text-center text-muted-foreground"
                   >
                     No attendance sessions have been recorded yet.
                   </td>

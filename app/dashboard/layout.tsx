@@ -1,17 +1,20 @@
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
-import { DashboardHeader, DashboardSidebar } from "@/components/dashboard/header";
 import {
-  LayoutDashboard,
-  Users,
-  BookOpen,
-  BarChart3,
-  AlertCircle,
-  FileText,
-  GraduationCap,
-  Briefcase,
-  UserRoundCogIcon,
+    DashboardHeader,
+    DashboardSidebar,
+} from "@/components/dashboard/header";
+import {
+    AlertCircle,
+    BarChart3,
+    BookOpen,
+    Briefcase,
+    FileText,
+    GraduationCap,
+    LayoutDashboard,
+    UserRoundCogIcon,
+    Users,
 } from "lucide-react";
+import { redirect } from "next/navigation";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -70,8 +73,8 @@ export default async function DashboardLayout({
       {
         label: "Users",
         href: "/dashboard/surveillant/users",
-        icon : <UserRoundCogIcon className="h-5 w-5" />
-      }
+        icon: <UserRoundCogIcon className="h-5 w-5" />,
+      },
     ];
   } else if (role === "TEACHER") {
     navLinks = [
@@ -132,12 +135,14 @@ export default async function DashboardLayout({
   }
 
   return (
-      <div className="flex h-screen flex-col bg-background">
-        <DashboardHeader userEmail={session.user?.email} role={role} />
-        <div className="flex flex-1 overflow-hidden">
-          <DashboardSidebar links={navLinks} role={role} />
-          <main className="flex-1 overflow-auto p-8">{children}</main>
-        </div>
+    <div className="flex h-screen flex-col bg-background">
+      <DashboardHeader userEmail={session.user?.email} role={role} />
+      <div className="flex flex-1 overflow-hidden">
+        <DashboardSidebar links={navLinks} role={role} />
+        <main className="min-w-0 flex-1 overflow-auto p-4 md:p-6 lg:p-8">
+          {children}
+        </main>
       </div>
-    );
+    </div>
+  );
 }

@@ -6,8 +6,8 @@ export default function ReportCardsPage() {
     <div className="space-y-6">
       <NavTitle h1="Report Cards" h2="View and download report cards" />
 
-      <Card className="bg-slate-900 border-slate-800 p-6">
-        <p className="text-slate-400">Report cards will be displayed here</p>
+      <Card className="bg-card border-border p-6">
+        <p className="text-muted-foreground">Report cards will be displayed here</p>
       </Card>
     </div>
   );

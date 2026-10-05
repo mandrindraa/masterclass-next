@@ -9,8 +9,8 @@ export function LanguageSwitcher() {
     <select
       value={locale}
       onChange={(e) => setLocale(e.target.value as "en" | "fr")}
-      className="h-7 rounded-lg border border-border bg-background px-2 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-      title="Language"
+      className="h-11 rounded-lg border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+      aria-label="Language"
     >
       <option value="en">EN</option>
       <option value="fr">FR</option>

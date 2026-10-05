@@ -241,10 +241,10 @@ export default function StudentsPage() {
       </div>
 
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-        <DialogContent className="bg-slate-900 border-slate-800">
+        <DialogContent className="bg-card border-border">
           <DialogHeader>
-            <DialogTitle className="text-white">Create New Student</DialogTitle>
-            <DialogDescription className="text-slate-400">
+            <DialogTitle className="text-foreground">Create New Student</DialogTitle>
+            <DialogDescription className="text-muted-foreground">
               Add a new student to the system
             </DialogDescription>
           </DialogHeader>
@@ -252,7 +252,7 @@ export default function StudentsPage() {
           <form onSubmit={handleCreateStudent} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="firstName" className="text-slate-300">
+                  <Label htmlFor="firstName" className="text-foreground">
                     First Name *
                   </Label>
                   <Input
@@ -261,11 +261,11 @@ export default function StudentsPage() {
                     value={formData.firstName}
                     onChange={handleFormChange}
                     placeholder="Jean"
-                    className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
+                    className="bg-muted border-input text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="lastName" className="text-slate-300">
+                  <Label htmlFor="lastName" className="text-foreground">
                     Last Name *
                   </Label>
                   <Input
@@ -274,13 +274,13 @@ export default function StudentsPage() {
                     value={formData.lastName}
                     onChange={handleFormChange}
                     placeholder="Rakoto"
-                    className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
+                    className="bg-muted border-input text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-slate-300">
+                <Label htmlFor="email" className="text-foreground">
                   Email *
                 </Label>
                 <Input
@@ -290,12 +290,12 @@ export default function StudentsPage() {
                   value={formData.email}
                   onChange={handleFormChange}
                   placeholder="student@school.mg"
-                  className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
+                  className="bg-muted border-input text-foreground placeholder:text-muted-foreground"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="birthDate" className="text-slate-300">
+                <Label htmlFor="birthDate" className="text-foreground">
                   Birth Date
                 </Label>
                 <Input
@@ -304,12 +304,12 @@ export default function StudentsPage() {
                   type="date"
                   value={formData.birthDate}
                   onChange={handleFormChange}
-                  className="bg-slate-800/50 border-slate-700 text-white"
+                  className="bg-muted border-input text-foreground"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="classId" className="text-slate-300">
+                <Label htmlFor="classId" className="text-foreground">
                   Class *
                 </Label>
                 <select
@@ -317,7 +317,7 @@ export default function StudentsPage() {
                   name="classId"
                   value={formData.classId}
                   onChange={handleFormChange}
-                  className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-3 py-2 bg-muted border border-input text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="">Select a class</option>
                   {classes.map((cls) => (
@@ -329,7 +329,7 @@ export default function StudentsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="academicYearId" className="text-slate-300">
+                <Label htmlFor="academicYearId" className="text-foreground">
                   Academic Year *
                 </Label>
                 <select
@@ -337,7 +337,7 @@ export default function StudentsPage() {
                   name="academicYearId"
                   value={formData.academicYearId}
                   onChange={handleFormChange}
-                  className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-3 py-2 bg-muted border border-input text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="">Select academic year</option>
                   {academicYears.map((year) => (
@@ -351,7 +351,7 @@ export default function StudentsPage() {
               {error && (
                 <Alert
                   variant="destructive"
-                  className="border-red-500/30 bg-red-500/10 text-red-400"
+                  className="border-border bg-muted text-foreground"
                 >
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>{error}</AlertDescription>
@@ -385,14 +385,14 @@ export default function StudentsPage() {
           if (!open && !isDeleting) setStudentToDelete(null);
         }}
       >
-        <DialogContent className="bg-slate-900 border-slate-800">
+        <DialogContent className="bg-card border-border">
           <DialogHeader>
-            <DialogTitle className="text-white">Delete Student</DialogTitle>
-            <DialogDescription className="text-slate-400">
+            <DialogTitle className="text-foreground">Delete Student</DialogTitle>
+            <DialogDescription className="text-muted-foreground">
               {studentToDelete && (
                 <>
                   Are you sure you want to delete{" "}
-                  <span className="text-white font-medium">
+                  <span className="text-foreground font-medium">
                     {studentToDelete.firstName} {studentToDelete.lastName}
                   </span>
                   ? This action cannot be undone.
@@ -404,7 +404,7 @@ export default function StudentsPage() {
           {error && (
             <Alert
               variant="destructive"
-              className="border-red-500/30 bg-red-500/10 text-red-400"
+              className="border-border bg-muted text-foreground"
             >
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>{error}</AlertDescription>
@@ -439,7 +439,7 @@ export default function StudentsPage() {
       </Dialog>
 
       {success && (
-        <Alert className="border-green-500/30 bg-green-500/10 text-green-400">
+        <Alert className="border-border bg-muted text-foreground">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>{success}</AlertDescription>
         </Alert>
@@ -448,7 +448,7 @@ export default function StudentsPage() {
       {error && !studentToDelete && (
         <Alert
           variant="destructive"
-          className="border-red-500/30 bg-red-500/10 text-red-400"
+          className="border-border bg-muted text-foreground"
         >
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>{error}</AlertDescription>
@@ -460,30 +460,30 @@ export default function StudentsPage() {
           placeholder="Search students by name or code..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
+          className="bg-muted border-input text-foreground placeholder:text-muted-foreground"
         />
       </div>
 
-      <Card className="bg-slate-900 border-slate-800 overflow-hidden">
+      <Card className="bg-card border-border overflow-hidden">
         {loading ? (
           <div className="p-8 text-center">
             <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary mb-2" />
-            <p className="text-slate-400">Loading students...</p>
+            <p className="text-muted-foreground">Loading students...</p>
           </div>
         ) : filteredStudents.length === 0 ? (
-          <div className="p-8 text-center text-slate-400">
+          <div className="p-8 text-center text-muted-foreground">
             No students found. Create one to get started.
           </div>
         ) : (
           <Table>
             <TableHeader>
-              <TableRow className="border-slate-800 hover:bg-slate-900">
-                <TableHead className="text-slate-300">Name</TableHead>
-                <TableHead className="text-slate-300">Student Code</TableHead>
-                <TableHead className="text-slate-300">Email</TableHead>
-                <TableHead className="text-slate-300">Class</TableHead>
-                <TableHead className="text-slate-300">Academic Year</TableHead>
-                <TableHead className="text-slate-300 text-right">
+              <TableRow className="border-border hover:bg-card">
+                <TableHead className="text-foreground">Name</TableHead>
+                <TableHead className="text-foreground">Student Code</TableHead>
+                <TableHead className="text-foreground">Email</TableHead>
+                <TableHead className="text-foreground">Class</TableHead>
+                <TableHead className="text-foreground">Academic Year</TableHead>
+                <TableHead className="text-foreground text-right">
                   Actions
                 </TableHead>
               </TableRow>
@@ -492,21 +492,21 @@ export default function StudentsPage() {
               {filteredStudents.map((student) => (
                 <TableRow
                   key={student.id}
-                  className="border-slate-800 hover:bg-slate-800/50"
+                  className="border-border hover:bg-muted"
                 >
-                  <TableCell className="text-white font-medium">
+                  <TableCell className="text-foreground font-medium">
                     {student.firstName} {student.lastName}
                   </TableCell>
-                  <TableCell className="text-slate-300">
+                  <TableCell className="text-foreground">
                     {student.studentCode}
                   </TableCell>
-                  <TableCell className="text-slate-400">
+                  <TableCell className="text-muted-foreground">
                     {student.user.email}
                   </TableCell>
-                  <TableCell className="text-slate-400">
+                  <TableCell className="text-muted-foreground">
                     {student.class.name}
                   </TableCell>
-                  <TableCell className="text-slate-400">
+                  <TableCell className="text-muted-foreground">
                     {student.academicYear.label}
                   </TableCell>
                   <TableCell className="text-right">

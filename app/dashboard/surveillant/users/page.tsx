@@ -26,12 +26,12 @@ export default async function Users({ searchParams
       <div className="space-y-6">
         <NavTitle h1="User management" h2="Manage registered users" />
 
-        <Card className="bg-slate-900 border-slate-800 p-6">
+        <Card className="bg-card border-border p-6">
           {
             users.map(function (u) {
               return (
                 <div key={u.id}>
-                  <p className="text-white"> test </p>
+                  <p className="text-foreground"> test </p>
                 </div>
               )
             })
