@@ -8,7 +8,7 @@ import {
     DialogContent,
     DialogDescription,
     DialogHeader,
-    DialogTitle
+    DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -68,6 +68,7 @@ export default function StudentsPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [createStep, setCreateStep] = useState<1 | 2>(1);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -124,6 +125,11 @@ export default function StudentsPage() {
     e.preventDefault();
     setError("");
     setSuccess("");
+
+    if (createStep === 1) {
+      setCreateStep(2);
+      return;
+    }
 
     if (
       !formData.firstName ||
@@ -206,6 +212,7 @@ export default function StudentsPage() {
       classId: "",
       academicYearId: "",
     });
+    setCreateStep(1);
     setSelectedStudent(null);
   }
 
@@ -247,115 +254,154 @@ export default function StudentsPage() {
         </div>
       </div>
 
-      <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+      <Dialog
+        open={showCreateDialog}
+        onOpenChange={(open) => {
+          setShowCreateDialog(open);
+          if (!open) {
+            setCreateStep(1);
+            setError("");
+          }
+        }}
+      >
         <DialogContent className="bg-card border-border">
           <DialogHeader>
             <DialogTitle className="text-foreground">
               Create New Student
             </DialogTitle>
             <DialogDescription className="text-muted-foreground">
-              Add a new student to the system
+              {createStep === 1
+                ? "Step 1 of 2: Personal information"
+                : "Step 2 of 2: About class"}
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleCreateStudent} className="space-y-4">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="firstName" className="text-foreground">
-                  First Name *
-                </Label>
-                <Input
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleFormChange}
-                  placeholder="Jean"
-                  className="bg-muted border-input text-foreground placeholder:text-muted-foreground"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lastName" className="text-foreground">
-                  Last Name *
-                </Label>
-                <Input
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleFormChange}
-                  placeholder="Rakoto"
-                  className="bg-muted border-input text-foreground placeholder:text-muted-foreground"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground">
-                Email *
-              </Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleFormChange}
-                placeholder="student@school.mg"
-                className="bg-muted border-input text-foreground placeholder:text-muted-foreground"
+            <div
+              className="flex gap-2"
+              role="group"
+              aria-label="Student creation progress"
+            >
+              <div
+                className={`h-1.5 flex-1 rounded-full ${createStep >= 1 ? "bg-primary" : "bg-muted"}`}
+              />
+              <div
+                className={`h-1.5 flex-1 rounded-full ${createStep >= 2 ? "bg-primary" : "bg-muted"}`}
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="birthDate" className="text-foreground">
-                Birth Date
-              </Label>
-              <Input
-                id="birthDate"
-                name="birthDate"
-                type="date"
-                value={formData.birthDate}
-                onChange={handleFormChange}
-                className="bg-muted border-input text-foreground"
-              />
-            </div>
+            {createStep === 1 ? (
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName" className="text-foreground">
+                      First Name *
+                    </Label>
+                    <Input
+                      id="firstName"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleFormChange}
+                      placeholder="Jean"
+                      autoComplete="given-name"
+                      required
+                      className="bg-muted border-input text-foreground placeholder:text-muted-foreground"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName" className="text-foreground">
+                      Last Name *
+                    </Label>
+                    <Input
+                      id="lastName"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleFormChange}
+                      placeholder="Rakoto"
+                      autoComplete="family-name"
+                      required
+                      className="bg-muted border-input text-foreground placeholder:text-muted-foreground"
+                    />
+                  </div>
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="classId" className="text-foreground">
-                Class *
-              </Label>
-              <select
-                id="classId"
-                name="classId"
-                value={formData.classId}
-                onChange={handleFormChange}
-                className="w-full px-3 py-2 bg-muted border border-input text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                <option value="">Select a class</option>
-                {classes.map((cls) => (
-                  <option key={cls.id} value={cls.id}>
-                    {cls.name} ({cls.level})
-                  </option>
-                ))}
-              </select>
-            </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-foreground">
+                    Email *
+                  </Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleFormChange}
+                    placeholder="student@school.mg"
+                    autoComplete="email"
+                    required
+                    className="bg-muted border-input text-foreground placeholder:text-muted-foreground"
+                  />
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="academicYearId" className="text-foreground">
-                Academic Year *
-              </Label>
-              <select
-                id="academicYearId"
-                name="academicYearId"
-                value={formData.academicYearId}
-                onChange={handleFormChange}
-                className="w-full px-3 py-2 bg-muted border border-input text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                <option value="">Select academic year</option>
-                {academicYears.map((year) => (
-                  <option key={year.id} value={year.id}>
-                    {year.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+                <div className="space-y-2">
+                  <Label htmlFor="birthDate" className="text-foreground">
+                    Birth Date
+                  </Label>
+                  <Input
+                    id="birthDate"
+                    name="birthDate"
+                    type="date"
+                    value={formData.birthDate}
+                    onChange={handleFormChange}
+                    autoComplete="bday"
+                    className="bg-muted border-input text-foreground"
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="classId" className="text-foreground">
+                    Class *
+                  </Label>
+                  <select
+                    id="classId"
+                    name="classId"
+                    value={formData.classId}
+                    onChange={handleFormChange}
+                    required
+                    className="h-11 w-full rounded-lg border border-input bg-muted px-3 text-base text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
+                  >
+                    <option value="">Select a class</option>
+                    {classes.map((cls) => (
+                      <option key={cls.id} value={cls.id}>
+                        {cls.name} ({cls.level})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="academicYearId" className="text-foreground">
+                    Academic Year *
+                  </Label>
+                  <select
+                    id="academicYearId"
+                    name="academicYearId"
+                    value={formData.academicYearId}
+                    onChange={handleFormChange}
+                    required
+                    className="h-11 w-full rounded-lg border border-input bg-muted px-3 text-base text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
+                  >
+                    <option value="">Select academic year</option>
+                    {academicYears.map((year) => (
+                      <option key={year.id} value={year.id}>
+                        {year.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
 
             {error && (
               <Alert
@@ -367,10 +413,7 @@ export default function StudentsPage() {
               </Alert>
             )}
 
-            <div className="flex gap-3 pt-4">
-              <Button type="submit" className="flex-1">
-                Create Student
-              </Button>
+            <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:gap-3">
               <Button
                 type="button"
                 variant="outline"
@@ -378,6 +421,22 @@ export default function StudentsPage() {
                 onClick={() => setShowCreateDialog(false)}
               >
                 Cancel
+              </Button>
+              {createStep === 2 && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => {
+                    setError("");
+                    setCreateStep(1);
+                  }}
+                >
+                  Back
+                </Button>
+              )}
+              <Button type="submit" className="flex-1">
+                {createStep === 1 ? "Continue" : "Create Student"}
               </Button>
             </div>
           </form>
